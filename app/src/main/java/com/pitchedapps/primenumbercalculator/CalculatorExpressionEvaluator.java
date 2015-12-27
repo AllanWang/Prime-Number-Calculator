@@ -54,7 +54,7 @@ public class CalculatorExpressionEvaluator {
 //        }
 
         try {
-            if (expr.length() == 0 || Double.valueOf(expr) != null) {
+            if (expr.length() == 0 || Long.valueOf(expr) != null) {
                 callback.onEvaluate(expr, null, Calculator.INVALID_RES_ID);
                 return;
             }
@@ -63,7 +63,7 @@ public class CalculatorExpressionEvaluator {
         }
 
         try {
-            double result = mSymbols.eval(expr);
+            double result = mSymbols.eval(expr); //TODO change evaluation
             if (Double.isNaN(result)) {
                 callback.onEvaluate(expr, null, R.string.error_nan);
             } else {

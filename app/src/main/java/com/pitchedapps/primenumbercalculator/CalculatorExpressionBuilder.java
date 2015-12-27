@@ -23,23 +23,23 @@ import android.text.TextUtils;
 public class CalculatorExpressionBuilder extends SpannableStringBuilder {
 
     private final CalculatorExpressionTokenizer mTokenizer;
-//    private boolean mIsEdited;
+    private boolean mIsEdited;
 
     public CalculatorExpressionBuilder(
-            CharSequence text, CalculatorExpressionTokenizer tokenizer) {
+            CharSequence text, CalculatorExpressionTokenizer tokenizer, boolean isEdited) {
         super(text);
 
         mTokenizer = tokenizer;
-//        mIsEdited = isEdited;
+        mIsEdited = isEdited;
     }
 
     @Override
     public SpannableStringBuilder replace(int start, int end, CharSequence tb, int tbstart,
             int tbend) {
-//        if (start != length() || end != length()) {
-//            mIsEdited = true;
-//            return super.replace(start, end, tb, tbstart, tbend);
-//        }
+        if (start != length() || end != length()) {
+            mIsEdited = true;
+            return super.replace(start, end, tb, tbstart, tbend);
+        }
 
         String appendExpr =
                 mTokenizer.getNormalizedExpression(tb.subSequence(tbstart, tbend).toString());
@@ -82,10 +82,10 @@ public class CalculatorExpressionBuilder extends SpannableStringBuilder {
         }
 
         // since this is the first edit replace the entire string
-//        if (!mIsEdited && appendExpr.length() > 0) {
-//            start = 0;
-//            mIsEdited = true;
-//        }
+        if (!mIsEdited && appendExpr.length() > 0) {
+            start = 0;
+            mIsEdited = true;
+        }
 
         appendExpr = mTokenizer.getLocalizedExpression(appendExpr);
         return super.replace(start, end, appendExpr, 0, appendExpr.length());

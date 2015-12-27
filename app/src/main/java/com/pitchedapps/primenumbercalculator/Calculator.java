@@ -195,7 +195,7 @@ public class Calculator extends Activity
         }
     }
 
-    @Override
+    @Override //TODO change to press twice to exit? Advance panel is gone so this isn't necessary
     public void onBackPressed() {
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
