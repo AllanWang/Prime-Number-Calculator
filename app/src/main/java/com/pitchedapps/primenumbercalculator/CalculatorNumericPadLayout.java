@@ -88,9 +88,9 @@ public class CalculatorNumericPadLayout extends CalculatorPadLayout {
                     case R.id.digit_9:
                         b.setText(String.valueOf((char) (zeroDigit + 9)));
                         break;
-                    case R.id.dec_point:
-                        b.setText(String.valueOf(symbols.getDecimalSeparator()));
-                        break;
+//                    case R.id.dec_point:
+//                        b.setText(String.valueOf(symbols.getDecimalSeparator()));
+//                        break;
                 }
             }
         }

@@ -20,6 +20,8 @@
     android:id="@+id/pad_numeric"
     style="@style/PadLayoutStyle.Numeric"
     android:background="@color/pad_numeric_background_color"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:columnCount="3"
     android:rowCount="4">
 
@@ -69,9 +71,19 @@
         android:onClick="onButtonClick" />
 
     <Button
-        android:id="@+id/dec_point"
-        style="@style/PadButtonStyle.Numeric"
-        android:onClick="onButtonClick" />
+        android:id="@+id/del"
+        style="@style/PadButtonStyle.Operator.Text"
+        android:contentDescription="@string/desc_del"
+        android:onClick="onButtonClick"
+        android:text="@string/del" />
+
+    <Button
+        android:id="@+id/clr"
+        style="@style/PadButtonStyle.Operator.Text"
+        android:contentDescription="@string/desc_clr"
+        android:onClick="onButtonClick"
+        android:text="@string/clr"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/digit_0"
@@ -80,7 +92,7 @@
 
     <Button
         android:id="@+id/eq"
-        style="@style/PadButtonStyle.Numeric.Equals"
+        style="@style/PadButtonStyle.Operator.Text"
         android:contentDescription="@string/desc_eq"
         android:onClick="onButtonClick"
         android:text="@string/eq" />

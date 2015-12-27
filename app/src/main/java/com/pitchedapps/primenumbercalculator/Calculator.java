@@ -42,8 +42,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.calculator2.CalculatorEditText.OnTextSizeChangeListener;
-import com.android.calculator2.CalculatorExpressionEvaluator.EvaluateCallback;
+import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChangeListener;
+import com.pitchedapps.primenumbercalculator.CalculatorExpressionEvaluator.EvaluateCallback;
 
 public class Calculator extends Activity
         implements OnTextSizeChangeListener, EvaluateCallback, OnLongClickListener {
@@ -131,9 +131,9 @@ public class Calculator extends Activity
         mClearButton = findViewById(R.id.clr);
 
         mEqualButton = findViewById(R.id.pad_numeric).findViewById(R.id.eq);
-        if (mEqualButton == null || mEqualButton.getVisibility() != View.VISIBLE) {
-            mEqualButton = findViewById(R.id.pad_operator).findViewById(R.id.eq);
-        }
+//        if (mEqualButton == null || mEqualButton.getVisibility() != View.VISIBLE) {
+//            mEqualButton = findViewById(R.id.pad_operator).findViewById(R.id.eq);
+//        }
 
         mTokenizer = new CalculatorExpressionTokenizer(this);
         mEvaluator = new CalculatorExpressionEvaluator(mTokenizer);
@@ -228,14 +228,6 @@ public class Calculator extends Activity
                 break;
             case R.id.clr:
                 onClear();
-                break;
-            case R.id.fun_cos:
-            case R.id.fun_ln:
-            case R.id.fun_log:
-            case R.id.fun_sin:
-            case R.id.fun_tan:
-                // Add left parenthesis after functions.
-                mFormulaEditText.append(((Button) view).getText() + "(");
                 break;
             default:
                 mFormulaEditText.append(((Button) view).getText());
