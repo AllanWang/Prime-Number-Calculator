@@ -49,9 +49,9 @@ public class CalculatorExpressionEvaluator {
         expr = mTokenizer.getNormalizedExpression(expr);
 
         // remove any trailing operators
-        while (expr.length() > 0 && "+-/*".indexOf(expr.charAt(expr.length() - 1)) != -1) {
-            expr = expr.substring(0, expr.length() - 1);
-        }
+//        while (expr.length() > 0 && "+-/*".indexOf(expr.charAt(expr.length() - 1)) != -1) {
+//            expr = expr.substring(0, expr.length() - 1);
+//        }
 
         try {
             if (expr.length() == 0 || Double.valueOf(expr) != null) {
