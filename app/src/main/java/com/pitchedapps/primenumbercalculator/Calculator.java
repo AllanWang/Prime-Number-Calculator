@@ -236,13 +236,15 @@ public class Calculator extends Activity
 
     private void onEquals() throws IOException, ClassNotFoundException {
         if (mCurrentState == CalculatorState.INPUT) {
-            setState(CalculatorState.RESULT);
+            setState(CalculatorState.EVALUATE);
 
 //            list = CalculatorSharedPreferences.getList("prime"); //TODO delete
 
 //            mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
             onResult(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
-            setState(CalculatorState.INPUT);
+//            setState(CalculatorState.INPUT);
+//            setState(CalculatorState.EVALUATE);
+//            mEvaluator.evaluate(mInputEditText.getText(), this);
         }
     }
 
@@ -334,11 +336,11 @@ public class Calculator extends Activity
                 mInputEditText.getVariableTextSize(result) / mResultEditText.getTextSize();
         final float resultTranslationX = (1.0f - resultScale) *
                 (mResultEditText.getWidth() / 2.0f - mResultEditText.getPaddingEnd());
-        final float resultTranslationY = (1.0f - resultScale) *
-                (mResultEditText.getHeight() / 2.0f - mResultEditText.getPaddingBottom()) +
-                (mInputEditText.getBottom() - mResultEditText.getBottom()) +
-                (mResultEditText.getPaddingBottom() - mInputEditText.getPaddingBottom());
-        final float inputTranslationY = -mInputEditText.getBottom();
+//        final float resultTranslationY = (1.0f - resultScale) * //TODO delete unnecessary lines for animation
+//                (mResultEditText.getHeight() / 2.0f - mResultEditText.getPaddingBottom()) +
+//                (mInputEditText.getBottom() - mResultEditText.getBottom()) +
+//                (mResultEditText.getPaddingBottom() - mInputEditText.getPaddingBottom());
+//        final float inputTranslationY = -mInputEditText.getBottom();
 
         // Use a value animator to fade to the final text color over the course of the animation.
         final int resultTextColor = mResultEditText.getCurrentTextColor();
@@ -357,9 +359,9 @@ public class Calculator extends Activity
                 textColorAnimator,
                 ObjectAnimator.ofFloat(mResultEditText, View.SCALE_X, resultScale),
                 ObjectAnimator.ofFloat(mResultEditText, View.SCALE_Y, resultScale),
-                ObjectAnimator.ofFloat(mResultEditText, View.TRANSLATION_X, resultTranslationX),
-                ObjectAnimator.ofFloat(mResultEditText, View.TRANSLATION_Y, resultTranslationY),
-                ObjectAnimator.ofFloat(mInputEditText, View.TRANSLATION_Y, inputTranslationY));
+                ObjectAnimator.ofFloat(mResultEditText, View.TRANSLATION_X, resultTranslationX));
+//                ObjectAnimator.ofFloat(mResultEditText, View.TRANSLATION_Y, resultTranslationY),
+//                ObjectAnimator.ofFloat(mInputEditText, View.TRANSLATION_Y, inputTranslationY));
         animatorSet.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -379,11 +381,12 @@ public class Calculator extends Activity
                 mInputEditText.setTranslationY(0.0f);
 
                 // Finally update the input to use the current result.
-                mInputEditText.setText(result);
+//                mInputEditText.setText(result);
                 setState(CalculatorState.RESULT);
 
                 mCurrentAnimator = null;
             }
+
         });
 
         mCurrentAnimator = animatorSet;
