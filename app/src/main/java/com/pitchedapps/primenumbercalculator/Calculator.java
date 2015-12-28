@@ -65,7 +65,7 @@ public class Calculator extends Activity
     public static Context context;
 
     private enum CalculatorState {
-        INPUT, RESULT
+        INPUT, EVALUATE, RESULT
     }
 
     private final OnKeyListener mInputOnKeyListener = new OnKeyListener() {
@@ -240,7 +240,9 @@ public class Calculator extends Activity
 
 //            list = CalculatorSharedPreferences.getList("prime"); //TODO delete
 
-            mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
+//            mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
+            onResult(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
+            setState(CalculatorState.INPUT);
         }
     }
 

@@ -21,23 +21,11 @@ public class CalculatorPrimeNumber {
 		ArrayList<Long> list = new ArrayList<Long>();
 		Long min = (long) 1;
 
-		list = CalculatorSharedPreferences.getList("prime");
-		//creates text file where arraylist will be stored
-//		if (!new File("data/data/com.pitchedapps.primenumbercalculator/prime.txt").isFile()) {
-//			Log.d("Prime", "File not found, creating new one");
-//			File dir = new File("data/data/com.pitchedapps.primenumbercalculator");
-//			dir.mkdirs();
-//			File prime = new File(dir, "prime.txt");
-//			prime.createNewFile();
-//		} else { //if file found, load existing arraylist
-//			Log.d("Prime", "File found");
-//			FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
-//			ObjectInputStream ois = new ObjectInputStream(fis);
-//			list = (ArrayList<Long>)ois.readObject();
-//			if (list.size() > 0) {
-//				min = list.get(list.size()-1);
-//			}
-//		}
+//		list = CalculatorSharedPreferences.getList("prime"); //TODO fix
+		if (list.size() > 0 && min != 2) {
+			min = list.get(list.size() - 1);
+		}
+
 
 		boolean range = false; //TODO change
 		String output = new String();
@@ -64,10 +52,8 @@ public class CalculatorPrimeNumber {
 			}
 		} else {
 			if (isPrime(number, min, list)) {
-				Log.d("Prime", number + " is a prime in the list");
 				output = "It\'s a prime number!";
 			} else {
-				Log.d("Prime", number + " is within the range of the list but is not prime.");
 				output = "It\'s not a prime number.";
 			}
 		}
@@ -85,26 +71,32 @@ public class CalculatorPrimeNumber {
 //		ObjectInputStream ois = new ObjectInputStream(fis);
 //		ArrayList<Long> list2 = (ArrayList<Long>)ois.readObject();
 
-		CalculatorSharedPreferences.saveList("prime", list);
+//		CalculatorSharedPreferences.saveList("prime", list);
 
 		return output;
 	}
 	
 	public static boolean isPrime (Long number, Long min, ArrayList<Long> list) {
 		if (number == 2) {
+			Log.d("Prime", number + " is 2; it's a prime");
 			return true;
 		}
 		if (number % 2 == 0) {
+			Log.d("Prime", number + " is even; it's not a prime");
 			return false;
 		} else if (inList(number, min, list)) {
+			Log.d("Prime", number + " is a prime in the list");
 			return true;
 		} else if (min > number) {
+			Log.d("Prime", number + " is within the range of the list and is not prime");
 			return false;
 		} else {
-			Long max = (long) Math.sqrt((double) number);
-			basicIsPrime(min, max);
+			Log.d("Prime", number + " needs to be tested with basicIsPrime");
+			if (min == 1) {
+				min = (long) 3;
+			}
+			return basicIsPrime(min, number);
 		}
-		return true;
 	}
 	
 	public static boolean inList (Long number, Long min, ArrayList<Long> list) {
@@ -129,17 +121,21 @@ public class CalculatorPrimeNumber {
 	public static boolean basicIsPrime (Long min, Long number) {
 		if (number < 16) { //added just to avoid issue with the square root below
 			if (number == 2 || number == 3 || number == 5 || number == 7 || number == 11 || number == 13) {
+				Log.d("Prime", number + " is a prime under 16");
 				return true;
 			} else {
+				Log.d("Prime", number + " is not a prime and is below 16");
 				return false;
 			}
 		} else {
 			Long max = (long) Math.sqrt((double) number);
 			while (min <= max) { //no need to check mod after the square root of the number
 				if (number % min == 0) {
+					Log.d("Prime", "Divisible by " + min);
 					return false;
 				} else {
 					min += 2;
+					Log.d("Prime", "Dividing by " + min);
 				}
 			}
 		}
