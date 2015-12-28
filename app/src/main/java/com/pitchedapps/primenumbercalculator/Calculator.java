@@ -137,9 +137,9 @@ public class Calculator extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
-        prefs = getSharedPreferences("shared_preferences_test",
+        prefs = getSharedPreferences("prime",
                 MODE_PRIVATE);
-        editor = getSharedPreferences("shared_preferences_test",
+        editor = getSharedPreferences("prime",
                 MODE_PRIVATE).edit();
 
 
