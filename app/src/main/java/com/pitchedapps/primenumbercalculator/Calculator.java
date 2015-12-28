@@ -66,7 +66,7 @@ public class Calculator extends Activity
     public static Context context;
 
     private enum CalculatorState {
-        INPUT, EVALUATE, RESULT, ERROR
+        INPUT, EVALUATE, RESULT
     }
 
     private final TextWatcher mInputTextWatcher = new TextWatcher() {
@@ -81,7 +81,6 @@ public class Calculator extends Activity
         @Override
         public void afterTextChanged(Editable editable) {
             setState(CalculatorState.INPUT);
-//            mEvaluator.evaluate(editable, Calculator.this);
         }
     };
 
@@ -110,14 +109,12 @@ public class Calculator extends Activity
     private final Editable.Factory mInputEditableFactory = new Editable.Factory() {
         @Override
         public Editable newEditable(CharSequence source) {
-            final boolean isEdited = mCurrentState == CalculatorState.INPUT
-                    || mCurrentState == CalculatorState.ERROR;
+            final boolean isEdited = mCurrentState == CalculatorState.INPUT;
             return new CalculatorExpressionBuilder(source, isEdited);
         }
     };
 
     private CalculatorState mCurrentState;
-    private CalculatorExpressionEvaluator mEvaluator;
 
     private View mDisplayView;
     private CalculatorEditText mInputResultEditText;
@@ -139,13 +136,11 @@ public class Calculator extends Activity
         mPadViewPager = (ViewPager) findViewById(R.id.pad_pager);
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
-        mEvaluator = new CalculatorExpressionEvaluator();
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
                 savedInstanceState.getInt(KEY_CURRENT_STATE, CalculatorState.INPUT.ordinal())]);
         mInputResultEditText.setText(savedInstanceState.getString(KEY_CURRENT_EXPRESSION, ""));
-//        mEvaluator.evaluate(mInputResultEditText.getText(), this);
         mInputResultEditText.setEditableFactory(mInputEditableFactory);
         mInputResultEditText.addTextChangedListener(mInputTextWatcher);
         mInputResultEditText.setOnKeyListener(mInputOnKeyListener);
@@ -173,7 +168,7 @@ public class Calculator extends Activity
         if (mCurrentState != state) {
             mCurrentState = state;
 
-            if (state == CalculatorState.RESULT || state == CalculatorState.ERROR) {
+            if (state == CalculatorState.RESULT) {
                 mDeleteButton.setVisibility(View.GONE);
                 mClearButton.setVisibility(View.VISIBLE);
             } else {
@@ -181,19 +176,12 @@ public class Calculator extends Activity
                 mClearButton.setVisibility(View.GONE);
             }
 
-            if (state == CalculatorState.ERROR) {
-                final int errorColor = getResources().getColor(R.color.calculator_error_color);
-                mInputResultEditText.setTextColor(errorColor);
-                mResultEditText.setTextColor(errorColor);
-                getWindow().setStatusBarColor(errorColor);
-            } else {
-                mInputResultEditText.setTextColor(
-                        getResources().getColor(R.color.display_input_text_color));
-                mResultEditText.setTextColor(
-                        getResources().getColor(R.color.display_result_text_color));
-                getWindow().setStatusBarColor(
-                        getResources().getColor(R.color.calculator_accent_color));
-            }
+            mInputResultEditText.setTextColor(
+                    getResources().getColor(R.color.display_input_text_color));
+            mResultEditText.setTextColor(
+                    getResources().getColor(R.color.display_result_text_color));
+            getWindow().setStatusBarColor(
+                    getResources().getColor(R.color.calculator_accent_color));
         }
     }
 
@@ -246,22 +234,6 @@ public class Calculator extends Activity
         return false;
     }
 
-//    @Override
-//    public void onEvaluate(String expr, String result, int errorResourceId) {
-//        if (mCurrentState == CalculatorState.INPUT) {
-//            mResultEditText.setText(result);
-//        } else if (errorResourceId != INVALID_RES_ID) {
-//            onError(errorResourceId);
-//        } else if (!TextUtils.isEmpty(result)) {
-//            onResult(result);
-//        } else if (mCurrentState == CalculatorState.EVALUATE) {
-//            // The current expression cannot be evaluated -> return to the input state.
-//            setState(CalculatorState.INPUT);
-//        }
-//
-//        mInputResultEditText.requestFocus();
-//    }
-
     @Override
     public void onTextSizeChanged(final TextView textView, float oldSize) {
         if (mCurrentState != CalculatorState.INPUT) {
@@ -294,22 +266,8 @@ public class Calculator extends Activity
 
 //            list = CalculatorSharedPreferences.getList("prime"); //TODO delete
 
-//            mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputResultEditText.getText().toString())));
             onResult(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputResultEditText.getText().toString())));
-//            setState(CalculatorState.INPUT);
 
-//            if (mCurrentState == CalculatorState.INPUT) {
-//                Calculator.mResultEditText.setText(result);
-//            } else if (errorResourceId != INVALID_RES_ID) {
-//                onError(errorResourceId);
-//            } else if (!TextUtils.isEmpty(result)) {
-//                onResult(result);
-//            } else if (mCurrentState == CalculatorState.EVALUATE) {
-//                // The current expression cannot be evaluated -> return to the input state.
-//                setState(CalculatorState.INPUT);
-//            }
-//            setState(CalculatorState.EVALUATE);
-//            mEvaluator.evaluate(mInputResultEditText.getText(), this);
         }
     }
 
@@ -391,17 +349,6 @@ public class Calculator extends Activity
 //                setState(CalculatorState.INPUT);
             }
         });
-    }
-
-    private void onError(final int errorResourceId) {
-        if (mCurrentState != CalculatorState.EVALUATE) {
-            // Only animate error on evaluate.
-            mResultEditText.setText(errorResourceId);
-            return;
-        }
-
-        setState(CalculatorState.ERROR); //TODO add animation
-        mResultEditText.setText(errorResourceId);
     }
 
     private void onResult(final String result) {
