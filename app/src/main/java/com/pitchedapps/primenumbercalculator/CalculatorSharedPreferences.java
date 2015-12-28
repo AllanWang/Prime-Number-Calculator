@@ -1,42 +1,75 @@
 package com.pitchedapps.primenumbercalculator;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by 7681 on 2015-12-27.
  */
+
 public class CalculatorSharedPreferences {
+    static Context context;
+    static SharedPreferences prefs;
+    static SharedPreferences.Editor editor;
 
-
-    SharedPreferences sPrefs= PreferenceManager.getDefaultSharedPreferences(Calculator.context);
-    SharedPreferences.Editor sEdit=sPrefs.edit();
-
-    public void storePrime(Context context, ArrayList<Long> list) {
-        for(int i=0;i<Calculator.list.size();i++)
-        {
-            sEdit.putLong("val" + i, Calculator.list.get(i));
-        }
-        sEdit.putInt("size",Calculator.list.size());
-        sEdit.commit();
+    public CalculatorSharedPreferences(Context context) {
+        this.context = context;
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        editor = prefs.edit();
     }
 
-    public ArrayList<Long> loadPrime(Context context) {
-        int size = sPrefs.getInt("size",0);
-
-        for(int j=0;j<size;j++) {
-            Calculator.list.add(sPrefs.getLong("val" + j, 0));
-        }
-        return Calculator.list;
+    /**
+     * Converts the provided ArrayList<String>
+     * into a JSONArray and saves it as a single
+     * string in the apps shared preferences
+     * @param String key Preference key for SharedPreferences
+     * @param array ArrayList<String> containing the list items
+     */
+    public static void saveList(String key, ArrayList<Long> list) {
+        JSONArray jList = new JSONArray(list);
+        editor.remove(key);
+        editor.putString(key, jList.toString());
+        editor.commit();
+        Log.d("Prime", "List saved!");
     }
-    public void addPrime(Context context, ArrayList<Long> list) {
-        
+
+    /**
+     * Loads a JSONArray from shared preferences
+     * and converts it to an ArrayList<String>
+     * @param String key Preference key for SharedPreferences
+     * @return ArrayList<String> containing the saved values from the JSONArray
+     */
+    public static ArrayList<Long> getList(String key) {
+        ArrayList<Long> list = new ArrayList<Long>();
+        String jArrayString = prefs.getString(key, "NOPREFSAVED");
+        if (jArrayString.matches("NOPREFSAVED")) return getDefaultArray();
+        else {
+            try {
+                JSONArray jArray = new JSONArray(jArrayString);
+                for (int i = 0; i < jArray.length(); i++) {
+                    list.add(jArray.getLong(i));
+                }
+                Log.d("Prime", "List loaded.");
+                return list;
+            } catch (JSONException e) {
+                return getDefaultArray();
+            }
+        }
+    }
+
+    // Get a default array in the event that there is no array
+    // saved or a JSONException occurred
+    private static ArrayList<Long> getDefaultArray() {
+        Log.d("Prime", "ArrayList not found; creating new one.");
+        ArrayList<Long> array = new ArrayList<Long>();
+        return array;
     }
 }

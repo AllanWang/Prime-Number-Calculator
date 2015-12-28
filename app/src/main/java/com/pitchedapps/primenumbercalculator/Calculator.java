@@ -26,16 +26,12 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -48,7 +44,6 @@ import android.widget.TextView;
 
 import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChangeListener;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -243,14 +238,7 @@ public class Calculator extends Activity
         if (mCurrentState == CalculatorState.INPUT) {
             setState(CalculatorState.RESULT);
 
-            File file = getBaseContext().getFileStreamPath("prime.txt");
-            if (!file.exists()) {
-                Log.d("Prime", "File not found, creating new one");
-                file.createNewFile();
-            } else {
-                Log.d("Prime", "File found");
-                file.write()
-            }
+//            list = CalculatorSharedPreferences.getList("prime"); //TODO delete
 
             mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
         }

@@ -21,22 +21,23 @@ public class CalculatorPrimeNumber {
 		ArrayList<Long> list = new ArrayList<Long>();
 		Long min = (long) 1;
 
+		list = CalculatorSharedPreferences.getList("prime");
 		//creates text file where arraylist will be stored
-		if (!new File("data/data/com.pitchedapps.primenumbercalculator/prime.txt").isFile()) {
-			Log.d("Prime", "File not found, creating new one");
-			File dir = new File("data/data/com.pitchedapps.primenumbercalculator");
-			dir.mkdirs();
-			File prime = new File(dir, "prime.txt");
-			prime.createNewFile();
-		} else { //if file found, load existing arraylist
-			Log.d("Prime", "File found");
-			FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			list = (ArrayList<Long>)ois.readObject();
-			if (list.size() > 0) {
-				min = list.get(list.size()-1);
-			}
-		}
+//		if (!new File("data/data/com.pitchedapps.primenumbercalculator/prime.txt").isFile()) {
+//			Log.d("Prime", "File not found, creating new one");
+//			File dir = new File("data/data/com.pitchedapps.primenumbercalculator");
+//			dir.mkdirs();
+//			File prime = new File(dir, "prime.txt");
+//			prime.createNewFile();
+//		} else { //if file found, load existing arraylist
+//			Log.d("Prime", "File found");
+//			FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
+//			ObjectInputStream ois = new ObjectInputStream(fis);
+//			list = (ArrayList<Long>)ois.readObject();
+//			if (list.size() > 0) {
+//				min = list.get(list.size()-1);
+//			}
+//		}
 
 		boolean range = false; //TODO change
 		String output = new String();
@@ -71,18 +72,20 @@ public class CalculatorPrimeNumber {
 			}
 		}
         
-		try {
-		    FileOutputStream fos = new FileOutputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
-		    ObjectOutputStream oos = new ObjectOutputStream(fos);   
-		    oos.writeObject(list); // write MenuArray to ObjectOutputStream
-		    oos.close(); 
-		} catch(Exception ex) {
-		    ex.printStackTrace();
-		}
-		
-		FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		ArrayList<Long> list2 = (ArrayList<Long>)ois.readObject();
+//		try {
+//		    FileOutputStream fos = new FileOutputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
+//		    ObjectOutputStream oos = new ObjectOutputStream(fos);
+//		    oos.writeObject(list); // write MenuArray to ObjectOutputStream
+//		    oos.close();
+//		} catch(Exception ex) {
+//		    ex.printStackTrace();
+//		}
+//
+//		FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
+//		ObjectInputStream ois = new ObjectInputStream(fis);
+//		ArrayList<Long> list2 = (ArrayList<Long>)ois.readObject();
+
+		CalculatorSharedPreferences.saveList("prime", list);
 
 		return output;
 	}
