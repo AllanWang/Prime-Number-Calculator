@@ -1,14 +1,8 @@
 package com.pitchedapps.primenumbercalculator;
 
-import android.content.Context;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 // 2015/12/24
@@ -52,9 +46,9 @@ public class CalculatorPrimeNumber {
 			}
 		} else {
 			if (isPrime(number, min, list)) {
-				output = "It\'s a prime number!";
+				output = number + " is prime!";
 			} else {
-				output = "It\'s not a prime number.";
+				output = number + " is not prime.";
 			}
 		}
         
@@ -135,7 +129,6 @@ public class CalculatorPrimeNumber {
 					return false;
 				} else {
 					min += 2;
-					Log.d("Prime", "Dividing by " + min);
 				}
 			}
 		}

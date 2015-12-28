@@ -16,10 +16,7 @@
 
 package com.pitchedapps.primenumbercalculator;
 
-import android.content.Context;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.util.Log;
 
 public class CalculatorExpressionBuilder extends SpannableStringBuilder {
 
@@ -40,7 +37,6 @@ public class CalculatorExpressionBuilder extends SpannableStringBuilder {
 //            Log.d("Prime", "mIsEdited = true");
 //            return super.replace(start, end, tb, tbstart, tbend);
 //        }
-        Log.d("Prime", "Starting SpannableStringBuilder");
         String appendExpr = tb.subSequence(tbstart, tbend).toString();
         if (appendExpr.length() == 1) {
 //            final String expr = mTokenizer.getNormalizedExpression(toString());
@@ -59,7 +55,6 @@ public class CalculatorExpressionBuilder extends SpannableStringBuilder {
         // since this is the first edit replace the entire string
         if (!mIsEdited && appendExpr.length() > 0) {
             start = 0;
-            Log.d("Prime", "starting new value");
             mIsEdited = true;
         }
 
