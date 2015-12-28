@@ -32,6 +32,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -65,8 +66,24 @@ public class Calculator extends Activity
     public static Context context;
 
     private enum CalculatorState {
-        INPUT, EVALUATE, RESULT
+        INPUT, EVALUATE, RESULT, ERROR
     }
+
+    private final TextWatcher mInputTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            setState(CalculatorState.INPUT);
+//            mEvaluator.evaluate(editable, Calculator.this);
+        }
+    };
 
     private final OnKeyListener mInputOnKeyListener = new OnKeyListener() {
         @Override
@@ -90,10 +107,20 @@ public class Calculator extends Activity
         }
     };
 
+    private final Editable.Factory mInputEditableFactory = new Editable.Factory() {
+        @Override
+        public Editable newEditable(CharSequence source) {
+            final boolean isEdited = mCurrentState == CalculatorState.INPUT
+                    || mCurrentState == CalculatorState.ERROR;
+            return new CalculatorExpressionBuilder(source, isEdited);
+        }
+    };
+
     private CalculatorState mCurrentState;
+    private CalculatorExpressionEvaluator mEvaluator;
 
     private View mDisplayView;
-    private CalculatorEditText mInputEditText;
+    private CalculatorEditText mInputResultEditText;
     private CalculatorEditText mResultEditText;
     private ViewPager mPadViewPager;
     private View mDeleteButton;
@@ -107,18 +134,22 @@ public class Calculator extends Activity
         setContentView(R.layout.activity_calculator);
 
         mDisplayView = findViewById(R.id.display);
-        mInputEditText = (CalculatorEditText) findViewById(R.id.input);
+        mInputResultEditText = (CalculatorEditText) findViewById(R.id.input_result);
         mResultEditText = (CalculatorEditText) findViewById(R.id.result);
         mPadViewPager = (ViewPager) findViewById(R.id.pad_pager);
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
+        mEvaluator = new CalculatorExpressionEvaluator();
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
                 savedInstanceState.getInt(KEY_CURRENT_STATE, CalculatorState.INPUT.ordinal())]);
-        mInputEditText.setText(savedInstanceState.getString(KEY_CURRENT_EXPRESSION, ""));
-        mInputEditText.setOnKeyListener(mInputOnKeyListener);
-        mInputEditText.setOnTextSizeChangeListener(this);
+        mInputResultEditText.setText(savedInstanceState.getString(KEY_CURRENT_EXPRESSION, ""));
+//        mEvaluator.evaluate(mInputResultEditText.getText(), this);
+        mInputResultEditText.setEditableFactory(mInputEditableFactory);
+        mInputResultEditText.addTextChangedListener(mInputTextWatcher);
+        mInputResultEditText.setOnKeyListener(mInputOnKeyListener);
+        mInputResultEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
 
     }
@@ -135,14 +166,14 @@ public class Calculator extends Activity
 
         outState.putInt(KEY_CURRENT_STATE, mCurrentState.ordinal());
         outState.putString(KEY_CURRENT_EXPRESSION,
-                mInputEditText.getText().toString());
+                mInputResultEditText.getText().toString());
     }
 
     private void setState(CalculatorState state) { //keep this
         if (mCurrentState != state) {
             mCurrentState = state;
 
-            if (state == CalculatorState.RESULT) {
+            if (state == CalculatorState.RESULT || state == CalculatorState.ERROR) {
                 mDeleteButton.setVisibility(View.GONE);
                 mClearButton.setVisibility(View.VISIBLE);
             } else {
@@ -150,12 +181,19 @@ public class Calculator extends Activity
                 mClearButton.setVisibility(View.GONE);
             }
 
-            mInputEditText.setTextColor(
-                    getResources().getColor(R.color.display_input_text_color));
-            mResultEditText.setTextColor(
-                    getResources().getColor(R.color.display_result_text_color));
-            getWindow().setStatusBarColor(
-                    getResources().getColor(R.color.calculator_accent_color));
+            if (state == CalculatorState.ERROR) {
+                final int errorColor = getResources().getColor(R.color.calculator_error_color);
+                mInputResultEditText.setTextColor(errorColor);
+                mResultEditText.setTextColor(errorColor);
+                getWindow().setStatusBarColor(errorColor);
+            } else {
+                mInputResultEditText.setTextColor(
+                        getResources().getColor(R.color.display_input_text_color));
+                mResultEditText.setTextColor(
+                        getResources().getColor(R.color.display_result_text_color));
+                getWindow().setStatusBarColor(
+                        getResources().getColor(R.color.calculator_accent_color));
+            }
         }
     }
 
@@ -194,7 +232,7 @@ public class Calculator extends Activity
                 onClear();
                 break;
             default:
-                mInputEditText.append(((Button) view).getText());
+                mInputResultEditText.append(((Button) view).getText());
                 break;
         }
     }
@@ -207,6 +245,22 @@ public class Calculator extends Activity
         }
         return false;
     }
+
+//    @Override
+//    public void onEvaluate(String expr, String result, int errorResourceId) {
+//        if (mCurrentState == CalculatorState.INPUT) {
+//            mResultEditText.setText(result);
+//        } else if (errorResourceId != INVALID_RES_ID) {
+//            onError(errorResourceId);
+//        } else if (!TextUtils.isEmpty(result)) {
+//            onResult(result);
+//        } else if (mCurrentState == CalculatorState.EVALUATE) {
+//            // The current expression cannot be evaluated -> return to the input state.
+//            setState(CalculatorState.INPUT);
+//        }
+//
+//        mInputResultEditText.requestFocus();
+//    }
 
     @Override
     public void onTextSizeChanged(final TextView textView, float oldSize) {
@@ -240,17 +294,28 @@ public class Calculator extends Activity
 
 //            list = CalculatorSharedPreferences.getList("prime"); //TODO delete
 
-//            mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
-            onResult(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
+//            mResultEditText.setText(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputResultEditText.getText().toString())));
+            onResult(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputResultEditText.getText().toString())));
 //            setState(CalculatorState.INPUT);
+
+//            if (mCurrentState == CalculatorState.INPUT) {
+//                Calculator.mResultEditText.setText(result);
+//            } else if (errorResourceId != INVALID_RES_ID) {
+//                onError(errorResourceId);
+//            } else if (!TextUtils.isEmpty(result)) {
+//                onResult(result);
+//            } else if (mCurrentState == CalculatorState.EVALUATE) {
+//                // The current expression cannot be evaluated -> return to the input state.
+//                setState(CalculatorState.INPUT);
+//            }
 //            setState(CalculatorState.EVALUATE);
-//            mEvaluator.evaluate(mInputEditText.getText(), this);
+//            mEvaluator.evaluate(mInputResultEditText.getText(), this);
         }
     }
 
     private void onDelete() {
         // Delete works like backspace; remove the last character from the expression.
-        final Editable inputText = mInputEditText.getEditableText();
+        final Editable inputText = mInputResultEditText.getEditableText();
         final int inputLength = inputText.length();
         if (inputLength > 0) {
             inputText.delete(inputLength - 1, inputLength);
@@ -312,7 +377,7 @@ public class Calculator extends Activity
     }
 
     private void onClear() {
-        if (TextUtils.isEmpty(mInputEditText.getText())) { //TODO check if necessary or not
+        if (TextUtils.isEmpty(mInputResultEditText.getText())) { //TODO check if necessary or not
             return;
         }
 
@@ -321,32 +386,42 @@ public class Calculator extends Activity
         reveal(sourceView, R.color.calculator_accent_color, new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                mInputEditText.getEditableText().clear();
-                mResultEditText.getEditableText().clear(); //TODO figure out why this wasn't needed before
-                setState(CalculatorState.INPUT);
+                mInputResultEditText.getEditableText().clear();
+//                mResultEditText.getEditableText().clear(); //TODO figure out why this wasn't needed before
+//                setState(CalculatorState.INPUT);
             }
         });
     }
 
+    private void onError(final int errorResourceId) {
+        if (mCurrentState != CalculatorState.EVALUATE) {
+            // Only animate error on evaluate.
+            mResultEditText.setText(errorResourceId);
+            return;
+        }
+
+        setState(CalculatorState.ERROR); //TODO add animation
+        mResultEditText.setText(errorResourceId);
+    }
 
     private void onResult(final String result) {
         // Calculate the values needed to perform the scale and translation animations,
         // accounting for how the scale will affect the final position of the text.
         final float resultScale =
-                mInputEditText.getVariableTextSize(result) / mResultEditText.getTextSize();
+                mInputResultEditText.getVariableTextSize(result) / mResultEditText.getTextSize();
         final float resultTranslationX = (1.0f - resultScale) *
                 (mResultEditText.getWidth() / 2.0f - mResultEditText.getPaddingEnd());
 //        final float resultTranslationY = (1.0f - resultScale) * //TODO delete unnecessary lines for animation
 //                (mResultEditText.getHeight() / 2.0f - mResultEditText.getPaddingBottom()) +
-//                (mInputEditText.getBottom() - mResultEditText.getBottom()) +
-//                (mResultEditText.getPaddingBottom() - mInputEditText.getPaddingBottom());
-//        final float inputTranslationY = -mInputEditText.getBottom();
+//                (mInputResultEditText.getBottom() - mResultEditText.getBottom()) +
+//                (mResultEditText.getPaddingBottom() - mInputResultEditText.getPaddingBottom());
+//        final float inputTranslationY = -mInputResultEditText.getBottom();
 
         // Use a value animator to fade to the final text color over the course of the animation.
         final int resultTextColor = mResultEditText.getCurrentTextColor();
-        final int inputTextColor = mInputEditText.getCurrentTextColor();
+        final int inputResultEditText = mInputResultEditText.getCurrentTextColor();
         final ValueAnimator textColorAnimator =
-                ValueAnimator.ofObject(new ArgbEvaluator(), resultTextColor, inputTextColor);
+                ValueAnimator.ofObject(new ArgbEvaluator(), resultTextColor, inputResultEditText);
         textColorAnimator.addUpdateListener(new AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -361,7 +436,7 @@ public class Calculator extends Activity
                 ObjectAnimator.ofFloat(mResultEditText, View.SCALE_Y, resultScale),
                 ObjectAnimator.ofFloat(mResultEditText, View.TRANSLATION_X, resultTranslationX));
 //                ObjectAnimator.ofFloat(mResultEditText, View.TRANSLATION_Y, resultTranslationY),
-//                ObjectAnimator.ofFloat(mInputEditText, View.TRANSLATION_Y, inputTranslationY));
+//                ObjectAnimator.ofFloat(mInputResultEditText, View.TRANSLATION_Y, inputTranslationY));
         animatorSet.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -378,10 +453,10 @@ public class Calculator extends Activity
                 mResultEditText.setScaleY(1.0f);
                 mResultEditText.setTranslationX(0.0f);
                 mResultEditText.setTranslationY(0.0f);
-                mInputEditText.setTranslationY(0.0f);
+                mInputResultEditText.setTranslationY(0.0f);
 
                 // Finally update the input to use the current result.
-//                mInputEditText.setText(result);
+                mInputResultEditText.setText(result);
                 setState(CalculatorState.RESULT);
 
                 mCurrentAnimator = null;

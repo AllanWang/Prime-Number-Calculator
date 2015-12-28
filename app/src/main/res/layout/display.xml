@@ -24,7 +24,7 @@
     android:elevation="4dip">
 
     <com.pitchedapps.primenumbercalculator.CalculatorEditText
-        android:id="@+id/input"
+        android:id="@+id/input_result"
         style="@style/DisplayEditTextStyle.Input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         style="@style/DisplayEditTextStyle.Result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/input"
+        android:layout_below="@id/input_result"
         android:inputType="none"
         android:focusable="false"
         android:textColor="@color/display_result_text_color" />
