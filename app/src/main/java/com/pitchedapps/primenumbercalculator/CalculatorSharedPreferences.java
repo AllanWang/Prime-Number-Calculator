@@ -16,12 +16,11 @@ import android.util.Log;
  */
 
 public class CalculatorSharedPreferences {
-    static Context context;
-    static SharedPreferences prefs;
-    static SharedPreferences.Editor editor;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     public CalculatorSharedPreferences(Context context) {
-        this.context = context;
+//        this.context = context;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         editor = prefs.edit();
     }
@@ -33,7 +32,7 @@ public class CalculatorSharedPreferences {
      * @param String key Preference key for SharedPreferences
      * @param array ArrayList<String> containing the list items
      */
-    public static void saveList(String key, ArrayList<Long> list) {
+    public void saveList(String key, ArrayList<Long> list) {
         JSONArray jList = new JSONArray(list);
         editor.remove(key);
         editor.putString(key, jList.toString());
@@ -47,7 +46,7 @@ public class CalculatorSharedPreferences {
      * @param String key Preference key for SharedPreferences
      * @return ArrayList<String> containing the saved values from the JSONArray
      */
-    public static ArrayList<Long> getList(String key) {
+    public ArrayList<Long> getList(String key) {
         ArrayList<Long> list = new ArrayList<Long>();
         String jArrayString = prefs.getString(key, "NOPREFSAVED");
         if (jArrayString.matches("NOPREFSAVED")) return getDefaultArray();
@@ -67,7 +66,7 @@ public class CalculatorSharedPreferences {
 
     // Get a default array in the event that there is no array
     // saved or a JSONException occurred
-    private static ArrayList<Long> getDefaultArray() {
+    private ArrayList<Long> getDefaultArray() {
         Log.d("Prime", "ArrayList not found; creating new one.");
         ArrayList<Long> array = new ArrayList<Long>();
         return array;
