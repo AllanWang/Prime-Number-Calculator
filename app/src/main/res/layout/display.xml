@@ -24,19 +24,19 @@
     android:elevation="4dip">
 
     <com.pitchedapps.primenumbercalculator.CalculatorEditText
-        android:id="@+id/formula"
-        style="@style/DisplayEditTextStyle.Formula"
+        android:id="@+id/input"
+        style="@style/DisplayEditTextStyle.Input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text|textNoSuggestions"
-        android:textColor="@color/display_formula_text_color" />
+        android:textColor="@color/display_input_text_color" />
 
     <com.pitchedapps.primenumbercalculator.CalculatorEditText
         android:id="@+id/result"
         style="@style/DisplayEditTextStyle.Result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/formula"
+        android:layout_below="@id/input"
         android:inputType="none"
         android:focusable="false"
         android:textColor="@color/display_result_text_color" />

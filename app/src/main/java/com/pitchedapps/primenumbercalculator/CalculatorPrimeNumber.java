@@ -1,5 +1,8 @@
 package com.pitchedapps.primenumbercalculator;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,27 +10,27 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 // 2015/12/24
 
 public class CalculatorPrimeNumber {
+
 	@SuppressWarnings({ "unchecked", "resource" })
-	public static Boolean primeNumberCalculator(Long number) throws IOException, ClassNotFoundException {
+	public static String primeNumberCalculator(Long number) throws IOException, ClassNotFoundException {
 		
 		ArrayList<Long> list = new ArrayList<Long>();
 		Long min = (long) 1;
-		
+
 		//creates text file where arraylist will be stored
-		if (!new File("prime/prime.txt").isFile()) {
-			System.out.println("File not found, creating new one");
-			File dir = new File("prime");
+		if (!new File("data/data/com.pitchedapps.primenumbercalculator/prime.txt").isFile()) {
+			Log.d("Prime", "File not found, creating new one");
+			File dir = new File("data/data/com.pitchedapps.primenumbercalculator");
 			dir.mkdirs();
 			File prime = new File(dir, "prime.txt");
 			prime.createNewFile();
 		} else { //if file found, load existing arraylist
-			System.out.println("File found!");
-			FileInputStream fis = new FileInputStream("prime/prime.txt");
+			Log.d("Prime", "File found");
+			FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			list = (ArrayList<Long>)ois.readObject();
 			if (list.size() > 0) {
@@ -36,16 +39,16 @@ public class CalculatorPrimeNumber {
 		}
 
 		boolean range = false; //TODO change
-		boolean isInputPrime = false; //TODO change
-
+		String output = new String();
+		Log.d("Prime", "Number in testing is: " + number);
 		if (range) {
 			if (number < 3) { //1 and 2 are not prime numbers
-				System.out.println("There are no prime numbers less than or equal to " + number + ".");
+				output = "No prime numbers found";
 			} else if (min == 1) { //there is no existing arraylist; get entire prime list number
 				getPrimeInRange(min, number, list);
-				printPrimeInRange(list.size(), number, list);
+				output = printPrimeInRange(list.size(), number, list, output);
 			} else if (min == number) {
-				printPrimeInRange(list.size(), number, list);
+				output = printPrimeInRange(list.size(), number, list, output);
 			} else if (min > number) { //if true, simply show section of arraylist below (number)
 				Long max = (long) 3;
 				int index = 1;
@@ -53,21 +56,23 @@ public class CalculatorPrimeNumber {
 					index++;
 					max = list.get(index);
 				}
-				printPrimeInRange(index, number, list);
+				output = printPrimeInRange(list.size(), number, list, output);
 			} else {
 				getPrimeInRange(min, number, list);
-				printPrimeInRange(list.size(), number, list);
+				output = printPrimeInRange(list.size(), number, list, output);
 			}
 		} else {
 			if (isPrime(number, min, list)) {
-				System.out.println(number + " is a prime number!");
+				Log.d("Prime", number + " is a prime in the list");
+				output = "It\'s a prime number!";
 			} else {
-				System.out.println(number + " is not a prime number.");
+				Log.d("Prime", number + " is within the range of the list but is not prime.");
+				output = "It\'s not a prime number.";
 			}
 		}
         
 		try {
-		    FileOutputStream fos = new FileOutputStream("prime/prime.txt");
+		    FileOutputStream fos = new FileOutputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
 		    ObjectOutputStream oos = new ObjectOutputStream(fos);   
 		    oos.writeObject(list); // write MenuArray to ObjectOutputStream
 		    oos.close(); 
@@ -75,11 +80,11 @@ public class CalculatorPrimeNumber {
 		    ex.printStackTrace();
 		}
 		
-		FileInputStream fis = new FileInputStream("prime/prime.txt");
+		FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		ArrayList<Long> list2 = (ArrayList<Long>)ois.readObject();
 
-		return isInputPrime;
+		return output;
 	}
 	
 	public static boolean isPrime (Long number, Long min, ArrayList<Long> list) {
@@ -138,31 +143,17 @@ public class CalculatorPrimeNumber {
 		return true;
 	}
 	
-	public static void printPrimeInRange (int index, Long number, ArrayList<Long> list) {
-		System.out.print("Prime numbers until " + number + ": ");
+	public static String printPrimeInRange (int index, Long number, ArrayList<Long> list, String output) {
+		output = "Prime numbers until\n" + number + ": ";
 		//note that index should be the number of items to be displayed, or 1 bigger than the final array size
 		int trueIndex = index;
 		while (index > 1) {
-			System.out.print(list.get(trueIndex - index) + ", ");
+			output += list.get(trueIndex - index) + ", ";
 			index--;
 		}
-		System.out.print(list.get(trueIndex - 1)); //prints last value without extra comma afterwards
+		output += list.get(trueIndex - 1); //prints last value without extra comma afterwards
+		return output;
 	}
 
-	public static Long getLong (Scanner scanner, String prompt) {
-		Long input = (long) 777; //value will be parsed again
-		boolean errorAlert = false;
-		while(!errorAlert) {
-			errorAlert = true;
-			try {
-				System.out.print(prompt);
-				input = Long.parseLong(scanner.next());
-			} catch (NumberFormatException e) {
-				System.out.println("Input must be an integer.");
-				errorAlert = false;
-			}
-		}
-		return input;
-	}
 
 }

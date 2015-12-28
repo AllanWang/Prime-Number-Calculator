@@ -18,7 +18,7 @@
 <!-- Styles for landscape phone (e.g. Nexus 4/5). -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="DisplayEditTextStyle.Formula">
+    <style name="DisplayEditTextStyle.Input">
         <item name="android:paddingTop">24dip</item>
         <item name="android:paddingBottom">8dip</item>
         <item name="android:paddingStart">16dip</item>
