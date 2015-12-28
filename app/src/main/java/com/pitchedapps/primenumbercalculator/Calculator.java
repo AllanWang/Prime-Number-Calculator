@@ -26,13 +26,16 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -45,6 +48,9 @@ import android.widget.TextView;
 
 import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChangeListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -53,6 +59,8 @@ public class Calculator extends Activity
 
     private static final String NAME = Calculator.class.getName();
     public static ArrayList<Long> list = new ArrayList<Long>();
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
 
     // instance state keys
@@ -129,6 +137,11 @@ public class Calculator extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
+        prefs = getSharedPreferences("shared_preferences_test",
+                MODE_PRIVATE);
+        editor = getSharedPreferences("shared_preferences_test",
+                MODE_PRIVATE).edit();
+
 
         mDisplayView = findViewById(R.id.display);
         mInputEditText = (CalculatorEditText) findViewById(R.id.input);
@@ -264,9 +277,11 @@ public class Calculator extends Activity
         if (mCurrentState == CalculatorState.INPUT) {
             setState(CalculatorState.EVALUATE);
 
-//            list = CalculatorSharedPreferences.getList("prime"); //TODO delete
+            list = getList("prime");
 
             onResult(CalculatorPrimeNumber.primeNumberCalculator(Long.parseLong(mInputEditText.getText().toString())));
+
+            saveList("prime", list);
 
         }
     }
@@ -414,5 +429,41 @@ public class Calculator extends Activity
 
         mCurrentAnimator = animatorSet;
         animatorSet.start();
+    }
+
+
+
+    public void saveList(String key, ArrayList<Long> list) {
+        JSONArray jList = new JSONArray(list);
+        editor.remove(key);
+        editor.putString(key, jList.toString());
+        editor.commit();
+        Log.d("Prime", "List saved!");
+    }
+
+    public ArrayList<Long> getList(String key) {
+        ArrayList<Long> list = new ArrayList<Long>();
+        String jArrayString = prefs.getString(key, "NOPREFSAVED");
+        if (jArrayString.matches("NOPREFSAVED")) return getDefaultArray();
+        else {
+            try {
+                JSONArray jArray = new JSONArray(jArrayString);
+                for (int i = 0; i < jArray.length(); i++) {
+                    list.add(jArray.getLong(i));
+                }
+                Log.d("Prime", "List loaded.");
+                return list;
+            } catch (JSONException e) {
+                return getDefaultArray();
+            }
+        }
+    }
+
+    // Get a default array in the event that there is no array
+    // saved or a JSONException occurred
+    private ArrayList<Long> getDefaultArray() {
+        Log.d("Prime", "ArrayList not found; creating new one.");
+        ArrayList<Long> array = new ArrayList<Long>();
+        return array;
     }
 }
