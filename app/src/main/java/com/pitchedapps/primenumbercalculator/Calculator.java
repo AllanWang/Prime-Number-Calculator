@@ -211,6 +211,7 @@ public class Calculator extends Activity
     @Override
     public void onBackPressed() {
         Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+        fadeInAnimation.setStartOffset(250);
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
@@ -236,13 +237,11 @@ public class Calculator extends Activity
         }
         if (mPadViewPager.getCurrentItem() != 0) {
             Button help = (Button) findViewById(R.id.advanced_help);
-            Log.d("Prime", "Initiate listener");
             help.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent e) {
                     x = (int) e.getX() + v.getLeft();
                     y = (int) e.getY() + v.getTop();
-                    Log.d("Prime", "New coordinates x: " + x + " and y: " + y);
                     return false;
                 }
             });
@@ -250,21 +249,9 @@ public class Calculator extends Activity
     }
 
     public void onButtonClick(View view) throws IOException, ClassNotFoundException {
+        Animation fadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+        fadeOutAnimation.setDuration(200);
 
-        /*if (mPadViewPager.getCurrentItem() != 0) {
-            Button help = (Button) view.findViewById(R.id.advanced_help);
-            Log.d("Prime", "Initiate listener");
-            help.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent e) {
-                    x = (int) e.getX() + v.getLeft();
-                    y = (int) e.getY() + v.getTop();
-                    Log.d("Prime", "New coordinates x: " + x + " and y: " + y);
-                    return false;
-                }
-            });
-        }
-*/
         switch (view.getId()) {
             case R.id.eq:
                 onEquals();
@@ -286,7 +273,9 @@ public class Calculator extends Activity
             case R.id.advanced_help:
 
                 enterReveal(findViewById(R.id.help));
+
                 findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
+                findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation);
                 break;
             case R.id.advanced_contact_me:
                 onContact();
@@ -569,7 +558,7 @@ public class Calculator extends Activity
 
         // create the animator for this view (the start radius is zero)
         Animator anim =
-                ViewAnimationUtils.createCircularReveal(myView, x, y, 0, finalRadius);
+                ViewAnimationUtils.createCircularReveal(myView, x, y, 0, finalRadius).setDuration(600);
 
         // make the view visible and start the animation
         myView.setVisibility(View.VISIBLE);
@@ -589,7 +578,7 @@ public class Calculator extends Activity
 
         // create the animation (the final radius is zero)
         Animator anim =
-                ViewAnimationUtils.createCircularReveal(myView, x, y, initialRadius, 0);
+                ViewAnimationUtils.createCircularReveal(myView, x, y, initialRadius, 0).setDuration(600);
 
         // make the view invisible when the animation is done
         anim.addListener(new AnimatorListenerAdapter() {

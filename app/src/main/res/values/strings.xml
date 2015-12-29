@@ -72,6 +72,6 @@
     <string name="dev_gplus_link">https://plus.google.com/+AllanWPitchedApps</string>
     <string name="dev_play_store">https://play.google.com/store/apps/developer?id=Pitched+Apps</string>
 
-    <string name="test">asdfasdfasdf\nasdfasdfasdf\nasdfasdfasdf\nasdfasdfasdf\nasdfasdfasdf\nasdfasdfasdf\nasdfasdfasdf\nasdfasdfasdfasdfasdfasdf\nasdfasdfasdfasdfasdfasd\fnasdfasdfasdfasdfasdfasd\fnasdfasdfasdfasdfasdf</string>
+    <string name="advanced_help_content">Welcome to Prime Number Calculator, my first functional android app! I haven\'t added all the features I wanted yet, so everything is currently quite self explanatory. Type in a number and the app will tell you whether it is prime or not.</string>
 
 </resources>

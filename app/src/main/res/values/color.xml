@@ -40,6 +40,7 @@
 
     <!-- Background color for the advanced pad. -->
     <color name="pad_advanced_background_color">#1DE9B6</color>
+    <color name="pad_advanced_background_color_2">#2bd9ad</color>
 
     <!-- Text color for a button in a pad. -->
     <color name="pad_button_text_color">#FFF</color>
