@@ -15,94 +15,103 @@
   limitations under the License.
   -->
 
-<com.pitchedapps.primenumbercalculator.CalculatorPadLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pad_advanced"
-    style="@style/PadLayoutStyle.Advanced"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/pad_advanced_background_color">
 
-    <Button
-        android:id="@+id/advanced_themes"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_themes"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_themes" />
+    <include layout="@layout/advanced_help" />
 
-    <Button
-        android:id="@+id/advanced_clear_list"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_clear_list"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_clear_list" />
+    <com.pitchedapps.primenumbercalculator.CalculatorPadLayout
+        android:id="@+id/pad_advanced"
+        style="@style/PadLayoutStyle.Advanced">
 
-    <Button
-        android:id="@+id/advanced_help"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_help"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_help" />
+        <Button
+            android:id="@+id/advanced_themes"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_themes"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_themes" />
 
-    <Button
-        android:id="@+id/advanced_contact_me"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_contact_me"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_contact_me" />
+        <Button
+            android:id="@+id/advanced_clear_list"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_clear_list"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_clear_list" />
 
-    <Button
-        android:id="@+id/advanced_rate_app"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_rate_app"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_rate_app" />
+        <Button
+            android:id="@+id/advanced_help"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_help"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_help" />
 
-    <Button
-        android:id="@+id/advanced_share_app"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_share_app"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_share_app" />
+        <Button
+            android:id="@+id/advanced_contact_me"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_contact_me"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_contact_me" />
 
-    <Button
-        android:id="@+id/advanced_about_dev"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_about_dev"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_about_dev" />
+        <Button
+            android:id="@+id/advanced_rate_app"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_rate_app"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_rate_app" />
 
-    <Button
-        android:id="@+id/advanced_other_apps"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_other_apps"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_other_apps" />
+        <Button
+            android:id="@+id/advanced_share_app"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_share_app"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_share_app" />
 
-    <Button
-        android:id="@+id/advanced_google_plus"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_google_plus"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_google_plus" />
+        <Button
+            android:id="@+id/advanced_about_dev"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_about_dev"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_about_dev" />
 
-    <Button
-        android:id="@+id/advanced_source"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_source"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_source" />
+        <Button
+            android:id="@+id/advanced_other_apps"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_other_apps"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_other_apps" />
 
-    <Button
-        android:id="@+id/advanced_credits"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_credits"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_credits" />
+        <Button
+            android:id="@+id/advanced_google_plus"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_google_plus"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_google_plus" />
 
-    <Button
-        android:id="@+id/advanced_donate"
-        style="@style/PadButtonStyle.Advanced"
-        android:contentDescription="@string/advanced_donate"
-        android:onClick="onButtonClick"
-        android:text="@string/advanced_donate" />
+        <Button
+            android:id="@+id/advanced_source"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_source"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_source" />
 
-</com.pitchedapps.primenumbercalculator.CalculatorPadLayout>
+        <Button
+            android:id="@+id/advanced_credits"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_credits"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_credits" />
+
+        <Button
+            android:id="@+id/advanced_donate"
+            style="@style/PadButtonStyle.Advanced"
+            android:contentDescription="@string/advanced_donate"
+            android:onClick="onButtonClick"
+            android:text="@string/advanced_donate" />
+
+    </com.pitchedapps.primenumbercalculator.CalculatorPadLayout>
+
+</FrameLayout>

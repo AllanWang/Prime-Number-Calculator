@@ -34,7 +34,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -42,12 +41,15 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroupOverlay;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +68,8 @@ public class Calculator extends Activity
     private static final String NAME = Calculator.class.getName();
     private static final String MARKET_URL = "https://play.google.com/store/apps/details?id=";
     public static ArrayList<Long> list = new ArrayList<Long>();
+    private int x = 0;
+    private int y = 0;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
@@ -166,7 +170,6 @@ public class Calculator extends Activity
         mInputEditText.setOnKeyListener(mInputOnKeyListener);
         mInputEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
-
     }
 
     @Override
@@ -207,10 +210,15 @@ public class Calculator extends Activity
 
     @Override
     public void onBackPressed() {
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
             super.onBackPressed();
+        } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
+            exitReveal(findViewById(R.id.help));
+            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
+            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation);
         } else {
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
@@ -226,9 +234,37 @@ public class Calculator extends Activity
         if (mCurrentAnimator != null) {
             mCurrentAnimator.end();
         }
+        if (mPadViewPager.getCurrentItem() != 0) {
+            Button help = (Button) findViewById(R.id.advanced_help);
+            Log.d("Prime", "Initiate listener");
+            help.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent e) {
+                    x = (int) e.getX() + v.getLeft();
+                    y = (int) e.getY() + v.getTop();
+                    Log.d("Prime", "New coordinates x: " + x + " and y: " + y);
+                    return false;
+                }
+            });
+        }
     }
 
     public void onButtonClick(View view) throws IOException, ClassNotFoundException {
+
+        /*if (mPadViewPager.getCurrentItem() != 0) {
+            Button help = (Button) view.findViewById(R.id.advanced_help);
+            Log.d("Prime", "Initiate listener");
+            help.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent e) {
+                    x = (int) e.getX() + v.getLeft();
+                    y = (int) e.getY() + v.getTop();
+                    Log.d("Prime", "New coordinates x: " + x + " and y: " + y);
+                    return false;
+                }
+            });
+        }
+*/
         switch (view.getId()) {
             case R.id.eq:
                 onEquals();
@@ -248,7 +284,9 @@ public class Calculator extends Activity
                 Toast.makeText(getApplicationContext(),"Stored prime number list cleared!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.advanced_help:
-                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+
+                enterReveal(findViewById(R.id.help));
+                findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
                 break;
             case R.id.advanced_contact_me:
                 onContact();
@@ -514,6 +552,56 @@ public class Calculator extends Activity
 
         intent.putExtra(Intent.EXTRA_TEXT, emailBuilder.toString());
         startActivity(Intent.createChooser(intent, (getResources().getString(R.string.send_title))));
+    }
+
+//    reveal animations
+
+    void enterReveal(View view) {
+        // previously invisible view
+        final View myView = view;
+
+        // get the center for the clipping circle
+//        int cx = myView.getMeasuredWidth() / 2;
+//        int cy = myView.getMeasuredHeight() / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(myView, x, y, 0, finalRadius);
+
+        // make the view visible and start the animation
+        myView.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    void exitReveal(View view) {
+        // previously visible view
+        final View myView = view;
+
+        // get the center for the clipping circle
+//        int cx = myView.getMeasuredWidth() / 2;
+//        int cy = myView.getMeasuredHeight() / 2;
+
+        // get the initial radius for the clipping circle
+        int initialRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        // create the animation (the final radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(myView, x, y, initialRadius, 0);
+
+        // make the view invisible when the animation is done
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                myView.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // start the animation
+        anim.start();
     }
 
 //    for list retrieval
