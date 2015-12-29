@@ -26,6 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <include layout="@layout/pad_advanced" />
+
     <LinearLayout style="@style/PadLinearLayoutStyle">
 
         <include layout="@layout/pad_numeric" />

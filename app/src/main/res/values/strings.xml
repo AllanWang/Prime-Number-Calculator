@@ -18,7 +18,8 @@
 <resources>
 
     <!-- Name of the application. [CHAR_LIMIT=NONE] -->
-    <string name="app_name">Calculator</string>
+    <string name="app_name">Prime Number Calculator</string>
+    <string name="app_github">https://github.com/asdfasdfvful/Prime-Number-Calculator</string>
 
     <!-- Error displayed when expression evaluates to NaN. [CHAR_LIMIT=14] -->
     <string name="error_nan">Not a number</string>
@@ -41,5 +42,34 @@
     <string name="desc_eq">equals</string>
 
     <string name="eq">enter</string>
+
+
+    <string name="advanced_themes">Themes</string>
+    <string name="advanced_clear_list">Clear Stored List</string>
+    <string name="advanced_help">Help</string>
+    <string name="advanced_contact_me">Contact Me</string>
+    <string name="advanced_rate_app">Rate App</string>
+    <string name="advanced_share_app">Share App</string>
+    <string name="advanced_about_dev">About Dev</string>
+    <string name="advanced_other_apps">My Play Store</string>
+    <string name="advanced_google_plus">My G+</string>
+    <string name="advanced_source">View Source Code</string>
+    <string name="advanced_credits">Credits</string>
+    <string name="advanced_donate">Donate</string>
+
+    <!--contact info-->
+    <string name="send_title">Send via</string>
+    <string name="email_id">pitchedapps@gmail.com</string>
+    <string name="email_subject">Prime Number Calculator Support</string>
+
+    <!-- Sharing app -->
+    <string name="share_title">Share via</string>
+    <string name="share_one">"Check out Prime Number Calculator by "</string>
+    <string name="share_two">.\n"Get it now at "</string>
+
+    <!--Dev Info-->
+    <string name="dev_name">Pitched Apps</string>
+    <string name="dev_gplus_link">https://plus.google.com/+AllanWPitchedApps</string>
+    <string name="dev_play_store">https://play.google.com/store/apps/developer?id=Pitched+Apps</string>
 
 </resources>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2014 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<com.pitchedapps.primenumbercalculator.CalculatorPadLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pad_advanced"
+    style="@style/PadLayoutStyle.Advanced"
+    android:background="@color/pad_advanced_background_color">
+
+    <Button
+        android:id="@+id/advanced_themes"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_themes"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_themes" />
+
+    <Button
+        android:id="@+id/advanced_clear_list"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_clear_list"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_clear_list" />
+
+    <Button
+        android:id="@+id/advanced_help"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_help"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_help" />
+
+    <Button
+        android:id="@+id/advanced_contact_me"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_contact_me"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_contact_me" />
+
+    <Button
+        android:id="@+id/advanced_rate_app"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_rate_app"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_rate_app" />
+
+    <Button
+        android:id="@+id/advanced_share_app"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_share_app"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_share_app" />
+
+    <Button
+        android:id="@+id/advanced_about_dev"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_about_dev"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_about_dev" />
+
+    <Button
+        android:id="@+id/advanced_other_apps"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_other_apps"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_other_apps" />
+
+    <Button
+        android:id="@+id/advanced_google_plus"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_google_plus"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_google_plus" />
+
+    <Button
+        android:id="@+id/advanced_source"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_source"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_source" />
+
+    <Button
+        android:id="@+id/advanced_credits"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_credits"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_credits" />
+
+    <Button
+        android:id="@+id/advanced_donate"
+        style="@style/PadButtonStyle.Advanced"
+        android:contentDescription="@string/advanced_donate"
+        android:onClick="onButtonClick"
+        android:text="@string/advanced_donate" />
+
+</com.pitchedapps.primenumbercalculator.CalculatorPadLayout>

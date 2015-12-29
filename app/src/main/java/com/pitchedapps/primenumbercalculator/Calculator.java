@@ -26,8 +26,13 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -45,6 +50,7 @@ import android.view.ViewGroupOverlay;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChangeListener;
 
@@ -58,6 +64,7 @@ public class Calculator extends Activity
         implements OnTextSizeChangeListener, OnLongClickListener {
 
     private static final String NAME = Calculator.class.getName();
+    private static final String MARKET_URL = "https://play.google.com/store/apps/details?id=";
     public static ArrayList<Long> list = new ArrayList<Long>();
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -198,7 +205,7 @@ public class Calculator extends Activity
         }
     }
 
-    @Override //TODO change to press twice to exit? Advance panel is gone so this isn't necessary
+    @Override
     public void onBackPressed() {
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
@@ -231,6 +238,56 @@ public class Calculator extends Activity
                 break;
             case R.id.clr:
                 onClear();
+                break;
+            case R.id.advanced_themes:
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.advanced_clear_list:
+                ArrayList<Long> empty = new ArrayList<>();
+                saveList("Prime", empty);
+                Toast.makeText(getApplicationContext(),"Stored prime number list cleared!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.advanced_help:
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.advanced_contact_me:
+                onContact();
+                break;
+            case R.id.advanced_rate_app:
+                Intent rate = new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URL + getApplicationContext().getPackageName()));
+                startActivity(rate);
+                break;
+            case R.id.advanced_share_app:
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody =
+                        getResources().getString(R.string.share_one) +
+                                getResources().getString(R.string.dev_name) +
+                                getResources().getString(R.string.share_two) +
+                                MARKET_URL + getApplicationContext().getPackageName();;
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, (getResources().getString(R.string.share_title))));
+                break;
+            case R.id.advanced_about_dev:
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.advanced_other_apps:
+                Intent devPlay = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.dev_play_store)));
+                startActivity(devPlay);
+                break;
+            case R.id.advanced_google_plus:
+                Intent gPlus = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.dev_gplus_link)));
+                startActivity(gPlus);
+                break;
+            case R.id.advanced_source:
+                Intent github = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_github)));
+                startActivity(github);
+                break;
+            case R.id.advanced_credits:
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.advanced_donate:
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 mInputEditText.append(((Button) view).getText());
@@ -431,7 +488,35 @@ public class Calculator extends Activity
         animatorSet.start();
     }
 
+//    for advanced options
 
+    private void onContact() {
+        StringBuilder emailBuilder = new StringBuilder();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + getResources().getString(R.string.email_id)));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.email_subject));
+
+        emailBuilder.append("Write here");
+        emailBuilder.append("\n \nOS Version: ").append(System.getProperty("os.version")).append("(").append(Build.VERSION.INCREMENTAL).append(")");
+        emailBuilder.append("\nOS API Level: ").append(Build.VERSION.SDK_INT);
+        emailBuilder.append("\nDevice: ").append(Build.DEVICE);
+        emailBuilder.append("\nManufacturer: ").append(Build.MANUFACTURER);
+        emailBuilder.append("\nModel (and Product): ").append(Build.MODEL).append(" (").append(Build.PRODUCT).append(")");
+        PackageInfo appInfo = null;
+        try {
+            appInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert appInfo != null;
+        emailBuilder.append("\nApp Version Name: ").append(appInfo.versionName);
+        emailBuilder.append("\nApp Version Code: ").append(appInfo.versionCode);
+
+        intent.putExtra(Intent.EXTRA_TEXT, emailBuilder.toString());
+        startActivity(Intent.createChooser(intent, (getResources().getString(R.string.send_title))));
+    }
+
+//    for list retrieval
 
     public void saveList(String key, ArrayList<Long> list) {
         JSONArray jList = new JSONArray(list);

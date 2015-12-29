@@ -35,6 +35,8 @@
 
         <include layout="@layout/pad_numeric" />
 
+        <include layout="@layout/pad_advanced" />
+
     </com.pitchedapps.primenumbercalculator.CalculatorPadViewPager>
 
 </LinearLayout>

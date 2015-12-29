@@ -38,7 +38,7 @@
         <item name="android:layout_margin">6dip</item>
         <item name="android:background">@drawable/pad_button_advanced_background</item>
         <item name="android:textColor">@color/pad_button_advanced_text_color</item>
-        <item name="android:textSize">27sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="PadButtonStyle.Numeric">
