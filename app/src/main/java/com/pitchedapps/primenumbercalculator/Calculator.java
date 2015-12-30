@@ -278,13 +278,9 @@ public class Calculator extends FragmentActivity
             // allow the system to handle the Back button.
             super.onBackPressed();
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
-            exitReveal(findViewById(R.id.help));
-            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
-            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
+            backToAdvancedPad(findViewById(R.id.help));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
-            exitReveal(findViewById(R.id.donations_fragment));
-            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
-            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
+            backToAdvancedPad(findViewById(R.id.donations_fragment));
         } else {
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
@@ -302,25 +298,10 @@ public class Calculator extends FragmentActivity
         }
 
         if (mPadViewPager.getCurrentItem() != 0) {
-            Button help = (Button) findViewById(R.id.advanced_help);
-            help.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent e) {
-                    x = (int) e.getX() + v.getLeft();
-                    y = (int) e.getY() + v.getTop();
-                    return false;
-                }
-            });
 
-            Button donate = (Button) findViewById(R.id.advanced_donate);
-            donate.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent e) {
-                    x = (int) e.getX() + v.getLeft();
-                    y = (int) e.getY() + v.getTop();
-                    return false;
-                }
-            });
+            addOnTouchListener(findViewById(R.id.advanced_help));
+            addOnTouchListener(findViewById(R.id.advanced_donate));
+
         }
     }
 
@@ -344,11 +325,7 @@ public class Calculator extends FragmentActivity
                 Toast.makeText(getApplicationContext(),"Stored prime number list cleared!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.advanced_help:
-
-                enterReveal(findViewById(R.id.help));
-
-                findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
-                findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+                afterAdvancedPad(findViewById(R.id.help));
                 break;
             case R.id.advanced_contact_me:
                 onContact();
@@ -624,11 +601,8 @@ public class Calculator extends FragmentActivity
             donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null, null, true, PAYPAL_USER,
                     PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item), false, null, null, false, null);
         }
-//        View view = donationsFragment.getView();
-        enterReveal(findViewById(R.id.donations_fragment));
 
-        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
-        findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+        afterAdvancedPad(findViewById(R.id.donations_fragment));
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.pad_advanced, donationsFragment)
@@ -638,7 +612,8 @@ public class Calculator extends FragmentActivity
 //  fade animations
     public Animation fadeInAnimation() {
         Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-        fadeInAnimation.setDuration(250);
+        fadeInAnimation.setStartOffset(200);
+        fadeInAnimation.setDuration(300);
         return fadeInAnimation;
     }
 
@@ -646,6 +621,34 @@ public class Calculator extends FragmentActivity
         Animation fadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
         fadeOutAnimation.setDuration(200);
         return fadeOutAnimation;
+    }
+
+//    button onTouchListener
+
+    void addOnTouchListener(View view) {
+        Button button = (Button) view;
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent e) {
+                x = (int) e.getX() + v.getLeft();
+                y = (int) e.getY() + v.getTop();
+                return false;
+            }
+        });
+    }
+
+//    advanced pad transitions
+
+    void afterAdvancedPad(View view) {
+        enterReveal(view);
+        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
+        findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+    }
+
+    void backToAdvancedPad(View view) {
+        exitReveal(view);
+        findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
+        findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
     }
 
 //    reveal animations

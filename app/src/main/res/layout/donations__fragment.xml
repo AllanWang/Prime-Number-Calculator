@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/donations__description"
-            android:textAppearance="@android:style/TextAppearance.Small" />
+            android:textColor="@color/pad_button_advanced_text_color"
+            android:fontFamily="sans-serif-light"/>
 
         <ViewStub
             android:id="@+id/donations__flattr_stub"
