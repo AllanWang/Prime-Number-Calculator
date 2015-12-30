@@ -48,21 +48,6 @@ public class CalculatorPrimeNumber {
 				output = number + " is not prime.";
 			}
 		}
-        
-//		try {
-//		    FileOutputStream fos = new FileOutputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
-//		    ObjectOutputStream oos = new ObjectOutputStream(fos);
-//		    oos.writeObject(list); // write MenuArray to ObjectOutputStream
-//		    oos.close();
-//		} catch(Exception ex) {
-//		    ex.printStackTrace();
-//		}
-//
-//		FileInputStream fis = new FileInputStream("data/data/com.pitchedapps.primenumbercalculator/prime.txt");
-//		ObjectInputStream ois = new ObjectInputStream(fis);
-//		ArrayList<Long> list2 = (ArrayList<Long>)ois.readObject();
-
-//		CalculatorSharedPreferences.saveList("prime", list);
 
 		return output;
 	}

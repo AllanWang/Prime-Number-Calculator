@@ -18,12 +18,10 @@ package com.pitchedapps.primenumbercalculator;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Button;
 import android.view.View;
-import java.text.DecimalFormat;
+import android.widget.Button;
+
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 public class CalculatorNumericPadLayout extends CalculatorPadLayout {
 
@@ -43,15 +41,7 @@ public class CalculatorNumericPadLayout extends CalculatorPadLayout {
     public void onFinishInflate() {
         super.onFinishInflate();
 
-        Locale locale = getResources().getConfiguration().locale;
-        if (!getResources().getBoolean(R.bool.use_localized_digits)) {
-            locale = new Locale.Builder()
-                .setLocale(locale)
-                .setUnicodeLocaleKeyword("nu", "latn")
-                .build();
-        }
-
-        final DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
+        final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         final char zeroDigit = symbols.getZeroDigit();
         for (int childIndex = getChildCount() - 1; childIndex >= 0; --childIndex) {
             final View v = getChildAt(childIndex);
@@ -88,9 +78,6 @@ public class CalculatorNumericPadLayout extends CalculatorPadLayout {
                     case R.id.digit_9:
                         b.setText(String.valueOf((char) (zeroDigit + 9)));
                         break;
-//                    case R.id.dec_point:
-//                        b.setText(String.valueOf(symbols.getDecimalSeparator()));
-//                        break;
                 }
             }
         }

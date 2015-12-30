@@ -32,17 +32,12 @@ public class CalculatorExpressionBuilder extends SpannableStringBuilder {
     @Override
     public SpannableStringBuilder replace(int start, int end, CharSequence tb, int tbstart,
             int tbend) {
-//        if (start != length() || end != length()) {
-//            mIsEdited = true;
-//            Log.d("Prime", "mIsEdited = true");
-//            return super.replace(start, end, tb, tbstart, tbend);
-//        }
+
         String appendExpr = tb.subSequence(tbstart, tbend).toString();
         if (appendExpr.length() == 1) {
-//            final String expr = mTokenizer.getNormalizedExpression(toString());
             switch (appendExpr.charAt(0)) {
                 case '0':
-                    // don't allow leading operator
+                    // don't allow leading zero
                     if (start == 0) {
                         appendExpr = "";
                         break;

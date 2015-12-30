@@ -25,7 +25,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -78,11 +77,6 @@ public class Calculator extends Activity
     private static final String KEY_CURRENT_STATE = NAME + "_currentState";
     private static final String KEY_CURRENT_EXPRESSION = NAME + "_currentExpression";
 
-    /**
-     * Constant for an invalid resource id.
-     */
-    public static final int INVALID_RES_ID = -1;
-    public static Context context;
 
     private enum CalculatorState {
         INPUT, EVALUATE, RESULT
@@ -444,8 +438,6 @@ public class Calculator extends Activity
             @Override
             public void onAnimationStart(Animator animation) {
                 mInputEditText.getEditableText().clear();
-//                mResultEditText.getEditableText().clear(); //TODO figure out why this wasn't needed before
-//                setState(CalculatorState.INPUT);
             }
         });
     }
@@ -549,10 +541,6 @@ public class Calculator extends Activity
         // previously invisible view
         final View myView = view;
 
-        // get the center for the clipping circle
-//        int cx = myView.getMeasuredWidth() / 2;
-//        int cy = myView.getMeasuredHeight() / 2;
-
         // get the final radius for the clipping circle
         int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
 
@@ -568,10 +556,6 @@ public class Calculator extends Activity
     void exitReveal(View view) {
         // previously visible view
         final View myView = view;
-
-        // get the center for the clipping circle
-//        int cx = myView.getMeasuredWidth() / 2;
-//        int cy = myView.getMeasuredHeight() / 2;
 
         // get the initial radius for the clipping circle
         int initialRadius = Math.max(myView.getWidth(), myView.getHeight());
