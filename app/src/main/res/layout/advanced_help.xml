@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/help"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="invisible"
+    android:padding="20.0dp"
     android:background="@color/pad_advanced_background_color_2">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20.0dp"
+        android:layout_alignParentTop="true"
         android:lineSpacingMultiplier="1.5"
         android:text="@string/advanced_help_content"
         android:textColor="@color/pad_button_advanced_text_color"
         android:textAlignment="center"
         android:fontFamily="sans-serif-light" />
-</ScrollView>
+
+    <TextView
+        android:id="@+id/help_version_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/pad_button_advanced_text_color"
+        android:text="@string/back"
+        android:fontFamily="sans-serif-light" />
+
+    <TextView
+        android:id="@+id/back_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="onBackPressed"
+        android:clickable="true"
+        android:text="@string/back"
+        android:textColor="@color/pad_button_advanced_text_color"
+        android:fontFamily="sans-serif-light"/>
+
+</RelativeLayout>

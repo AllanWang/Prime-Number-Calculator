@@ -32,7 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:prompt="@string/donations__google_android_market_text" />
+            android:prompt="@string/donations__google_android_market_text"
+            android:textColor="@color/pad_button_advanced_text_color"
+            android:fontFamily="sans-serif-light"/>
 
         <Button
             android:id="@+id/donations__google_android_market_donate_button"

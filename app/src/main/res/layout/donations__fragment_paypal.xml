@@ -34,8 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="8dp"
-        android:text="@string/donations__google_android_market_donate_button"
-        android:textColor="@color/pad_button_advanced_text_color"
-        android:fontFamily="sans-serif-light"/>
+        style="@style/AdvancedButton"
+        android:text="@string/donations__google_android_market_donate_button" />
 
 </LinearLayout>

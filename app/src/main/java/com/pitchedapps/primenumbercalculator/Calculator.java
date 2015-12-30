@@ -34,7 +34,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -79,6 +78,7 @@ public class Calculator extends FragmentActivity
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     IabHelper mHelper;
+
     /**
      * Google
      */
@@ -156,6 +156,7 @@ public class Calculator extends FragmentActivity
     private ViewPager mPadViewPager;
     private View mDeleteButton;
     private View mClearButton;
+    private TextView mHelpVersionName;
 
     private Animator mCurrentAnimator;
 
@@ -170,24 +171,40 @@ public class Calculator extends FragmentActivity
         editor = getSharedPreferences("prime",
                 MODE_PRIVATE).edit();
 
-
         mDisplayView = findViewById(R.id.display);
         mInputEditText = (CalculatorEditText) findViewById(R.id.input);
         mResultEditText = (CalculatorEditText) findViewById(R.id.result);
         mPadViewPager = (ViewPager) findViewById(R.id.pad_pager);
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
+        mHelpVersionName = (TextView) findViewById(R.id.help_version_number);
+//        mBack = (TextView) findViewById(R.id.back);
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
                 savedInstanceState.getInt(KEY_CURRENT_STATE, CalculatorState.INPUT.ordinal())]);
+
+        PackageInfo appInfo = null;
+        try {
+            appInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert appInfo != null;
+        mHelpVersionName.setText("v" + appInfo.versionName);
+
         mInputEditText.setText(savedInstanceState.getString(KEY_CURRENT_EXPRESSION, ""));
         mInputEditText.setEditableFactory(mInputEditableFactory);
         mInputEditText.addTextChangedListener(mInputTextWatcher);
         mInputEditText.setOnKeyListener(mInputOnKeyListener);
         mInputEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
-
+//        mBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
         //Setup donations
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
@@ -281,10 +298,16 @@ public class Calculator extends FragmentActivity
             backToAdvancedPad(findViewById(R.id.help));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.donations_fragment));
+        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
+            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
         } else {
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
         }
+    }
+
+    public void onBackPressed(View v) {
+        onBackPressed();
     }
 
     @Override
@@ -301,6 +324,9 @@ public class Calculator extends FragmentActivity
 
             addOnTouchListener(findViewById(R.id.advanced_help));
             addOnTouchListener(findViewById(R.id.advanced_donate));
+            addOnTouchListenerText(findViewById(R.id.back_help));
+            addOnTouchListenerText(findViewById(R.id.back_donate));
+//            addOnTouchListenerText(findViewById(R.id.back_credits));
 
         }
     }
@@ -361,7 +387,7 @@ public class Calculator extends FragmentActivity
                 startActivity(github);
                 break;
             case R.id.advanced_credits:
-                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                onCredits();
                 break;
             case R.id.advanced_donate:
                 onDonate();
@@ -609,6 +635,16 @@ public class Calculator extends FragmentActivity
                 .commit();
     }
 
+    public void onCredits() {
+//        CalculatorCreditsActivity creditsFragment = new CalculatorCreditsActivity();
+
+        afterAdvancedPad(findViewById(R.id.advanced_credits));
+
+//        getFragmentManager().beginTransaction()
+//                .replace(R.id.pad_advanced, creditsFragment)
+//                .commit();
+    }
+
 //  fade animations
     public Animation fadeInAnimation() {
         Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
@@ -623,11 +659,23 @@ public class Calculator extends FragmentActivity
         return fadeOutAnimation;
     }
 
-//    button onTouchListener
+//    onTouchListeners
 
     void addOnTouchListener(View view) {
         Button button = (Button) view;
         button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent e) {
+                x = (int) e.getX() + v.getLeft();
+                y = (int) e.getY() + v.getTop();
+                return false;
+            }
+        });
+    }
+
+    void addOnTouchListenerText(View view) {
+        TextView text = (TextView) view;
+        text.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent e) {
                 x = (int) e.getX() + v.getLeft();
@@ -745,4 +793,5 @@ public class Calculator extends FragmentActivity
     public boolean isPremium() {
         return mIsPremium;
     }
+
 }

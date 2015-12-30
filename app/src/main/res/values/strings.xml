@@ -42,7 +42,7 @@
     <string name="desc_eq">equals</string>
 
     <string name="eq">enter</string>
-
+    <string name="back">"         \n         \nBack     "</string><!--added padding allows for bigger on click area-->
 
     <string name="advanced_themes">Themes</string>
     <string name="advanced_clear_list">Clear Stored List</string>
