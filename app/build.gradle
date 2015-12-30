@@ -11,6 +11,15 @@ android {
         versionCode 11
         versionName "1.1"
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace("app-release.apk", "PNC-v" + versionName + ".apk"))
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,7 +30,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.google.code.gson:gson:2.5'
     compile 'org.sufficientlysecure:donations:2.4'
