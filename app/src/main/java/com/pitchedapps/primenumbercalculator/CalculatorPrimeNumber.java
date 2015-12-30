@@ -20,7 +20,7 @@ public class CalculatorPrimeNumber {
 
 		boolean range = false; //TODO change
 		String output = new String();
-		Log.d("Prime", "Number in testing is: " + number);
+		Log.d("PNC: ", "Number in testing is: " + number);
 		if (range) {
 			if (number < 3) { //1 and 2 are not prime numbers
 				output = "No prime numbers found";
@@ -54,20 +54,20 @@ public class CalculatorPrimeNumber {
 	
 	public static boolean isPrime (Long number, Long min) {
 		if (number == 2) {
-			Log.d("Prime", number + " is 2; it's a prime");
+			Log.d("PNC: ", number + " is 2; it's a prime");
 			return true;
 		}
 		if (number % 2 == 0) {
-			Log.d("Prime", number + " is even; it's not a prime");
+			Log.d("PNC: ", number + " is even; it's not a prime");
 			return false;
 		} else if (inList(number, min)) {
-			Log.d("Prime", number + " is a prime in the list");
+			Log.d("PNC: ", number + " is a prime in the list");
 			return true;
 		} else if (min > number) {
-			Log.d("Prime", number + " is within the range of the list and is not prime");
+			Log.d("PNC: ", number + " is within the range of the list and is not prime");
 			return false;
 		} else {
-			Log.d("Prime", number + " needs to be tested with basicIsPrime");
+			Log.d("PNC: ", number + " needs to be tested with basicIsPrime");
 			if (min == 1) {
 				min = (long) 3;
 			}
@@ -97,17 +97,17 @@ public class CalculatorPrimeNumber {
 	public static boolean basicIsPrime (Long min, Long number) {
 		if (number < 16) { //added just to avoid issue with the square root below
 			if (number == 2 || number == 3 || number == 5 || number == 7 || number == 11 || number == 13) {
-				Log.d("Prime", number + " is a prime under 16");
+				Log.d("PNC: ", number + " is a prime under 16");
 				return true;
 			} else {
-				Log.d("Prime", number + " is not a prime and is below 16");
+				Log.d("PNC: ", number + " is not a prime and is below 16");
 				return false;
 			}
 		} else {
 			Long max = (long) Math.sqrt((double) number);
 			while (min <= max) { //no need to check mod after the square root of the number
 				if (number % min == 0) {
-					Log.d("Prime", "Divisible by " + min);
+					Log.d("PNC: ", "Divisible by " + min);
 					return false;
 				} else {
 					min += 2;

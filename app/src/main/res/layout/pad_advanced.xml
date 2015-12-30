@@ -22,6 +22,8 @@
     android:layout_height="match_parent"
     android:background="@color/pad_advanced_background_color">
 
+    <include layout="@layout/donations__fragment" />
+
     <include layout="@layout/advanced_help" />
 
     <com.pitchedapps.primenumbercalculator.CalculatorPadLayout

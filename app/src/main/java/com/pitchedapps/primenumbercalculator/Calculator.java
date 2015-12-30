@@ -24,7 +24,6 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -34,6 +33,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -57,21 +58,41 @@ import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChange
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.sufficientlysecure.donations.DonationsFragment;
+import org.sufficientlysecure.donations.google.util.IabHelper;
+import org.sufficientlysecure.donations.google.util.IabResult;
+import org.sufficientlysecure.donations.google.util.Inventory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Calculator extends Activity
+public class Calculator extends FragmentActivity
         implements OnTextSizeChangeListener, OnLongClickListener {
 
     private static final String NAME = Calculator.class.getName();
     private static final String MARKET_URL = "https://play.google.com/store/apps/details?id=";
+    public boolean mIsPremium = false;
+    private String[] mGoogleCatalog;
     public static ArrayList<Long> list = new ArrayList<Long>();
     private int x = 0;
     private int y = 0;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    IabHelper mHelper;
+    /**
+     * Google
+     */
+    private static final String GOOGLE_PUBKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjL6lrdziw1KllwK2u7r8/zUlLZZxcg2a1/1RrP73yAzpl3yIkh3gdCPpvjwKb1MqB6sRVp8ziwpsGwFFaX4ECvDXz16rZFgz55V43MyFBHDXO4dnCUvuA58kY8YcZF+I1zyk4sJmqnXU+qmx+KeUpUR37+flM2/shAEUiaWW4wXam36VRezGtPcgQaPGop2AhbNNemOoi6QtynCO0Kj8t2RTUcAcHDqGgMy7iZnj6hIbIeawiok5EIQAfrNt0WnCDlgzoYrT6uudGaUobaZh1vnOIV2r6w8hLekVLjng5dFHYaDdwQAU+YfeE7oFr9mAlKhxiTdVsdoDpKLd9HLrqwIDAQAB";
+    private static final String[] GOOGLE_CATALOG_FREE = new String[]{"prime.donation.1",
+            "prime.donation.2", "prime.donation.3", "prime.donation.5", "prime.donation.10"};
+    private static final String[] GOOGLE_CATALOG_PRO = new String[]{"prime.donation.consumable.1",
+            "prime.donation.consumable.2", "prime.donation.consumable.3", "prime.donation.consumable.5", "prime.donation.consumable.10"};
 
+    /**
+     * PayPal
+     */
+    private static final String PAYPAL_USER = "pitchedapps@gmail.com";
+    private static final String PAYPAL_CURRENCY_CODE = "CAD";
 
     // instance state keys
     private static final String KEY_CURRENT_STATE = NAME + "_currentState";
@@ -142,6 +163,8 @@ public class Calculator extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
+
+
         prefs = getSharedPreferences("prime",
                 MODE_PRIVATE);
         editor = getSharedPreferences("prime",
@@ -164,6 +187,52 @@ public class Calculator extends Activity
         mInputEditText.setOnKeyListener(mInputOnKeyListener);
         mInputEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
+
+        //Setup donations
+        final IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+            public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+
+                if (inventory != null) {
+                    Log.d("PNC: ", "IAP inventory exists");
+
+                    Log.d("PNC: ", "Donations 1 is " + inventory.hasPurchase("glass.donation.1"));
+                    Log.d("PNC: ", "Donations 2 is " + inventory.hasPurchase("glass.donation.2"));
+                    Log.d("PNC: ", "Donations 3 is " + inventory.hasPurchase("glass.donation.3"));
+                    Log.d("PNC: ", "Donations 5 is " + inventory.hasPurchase("glass.donation.5"));
+                    Log.d("PNC: ", "Donations 10 is " + inventory.hasPurchase("glass.donation.10"));
+                    Log.d("PNC: ", "Donations 20 is " + inventory.hasPurchase("glass.donation.20"));
+
+                    if (inventory.hasPurchase("glass.donation.1") ||
+                            inventory.hasPurchase("glass.donation.2") ||
+                            inventory.hasPurchase("glass.donation.3") ||
+                            inventory.hasPurchase("glass.donation.5") ||
+                            inventory.hasPurchase("glass.donation.10") ||
+                            inventory.hasPurchase("glass.donation.20")) {
+                        Log.d("PNC: ", "IAP inventory contains a donation");
+
+                        mIsPremium = true;
+                    }
+                }
+                if (isPremium()) {
+                    mGoogleCatalog = GOOGLE_CATALOG_PRO;
+                }
+            }
+        };
+
+        if (isStoreVersion()) {
+            mHelper = new IabHelper(Calculator.this, GOOGLE_PUBKEY);
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result)
+                {
+                    if (!result.isSuccess()) {
+                        Log.d("PNC: ", "In-app Billing setup failed: " + result);
+                    } else {
+                        mHelper.queryInventoryAsync(false, mGotInventoryListener);
+                    }
+
+                }
+            }) ;
+        }
     }
 
     @Override
@@ -204,8 +273,6 @@ public class Calculator extends Activity
 
     @Override
     public void onBackPressed() {
-        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-        fadeInAnimation.setStartOffset(250);
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
@@ -213,7 +280,11 @@ public class Calculator extends Activity
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             exitReveal(findViewById(R.id.help));
             findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
-            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation);
+            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
+        } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
+            exitReveal(findViewById(R.id.donations_fragment));
+            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
+            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
         } else {
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
@@ -229,9 +300,20 @@ public class Calculator extends Activity
         if (mCurrentAnimator != null) {
             mCurrentAnimator.end();
         }
+
         if (mPadViewPager.getCurrentItem() != 0) {
             Button help = (Button) findViewById(R.id.advanced_help);
             help.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent e) {
+                    x = (int) e.getX() + v.getLeft();
+                    y = (int) e.getY() + v.getTop();
+                    return false;
+                }
+            });
+
+            Button donate = (Button) findViewById(R.id.advanced_donate);
+            donate.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent e) {
                     x = (int) e.getX() + v.getLeft();
@@ -243,9 +325,6 @@ public class Calculator extends Activity
     }
 
     public void onButtonClick(View view) throws IOException, ClassNotFoundException {
-        Animation fadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
-        fadeOutAnimation.setDuration(200);
-
         switch (view.getId()) {
             case R.id.eq:
                 onEquals();
@@ -269,7 +348,7 @@ public class Calculator extends Activity
                 enterReveal(findViewById(R.id.help));
 
                 findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
-                findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation);
+                findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
                 break;
             case R.id.advanced_contact_me:
                 onContact();
@@ -308,7 +387,7 @@ public class Calculator extends Activity
                 Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.advanced_donate:
-                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                onDonate();
                 break;
             default:
                 mInputEditText.append(((Button) view).getText());
@@ -535,6 +614,40 @@ public class Calculator extends Activity
         startActivity(Intent.createChooser(intent, (getResources().getString(R.string.send_title))));
     }
 
+    public void onDonate() {
+        DonationsFragment donationsFragment;
+        if (isStoreVersion()) {
+            donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, true, GOOGLE_PUBKEY, mGoogleCatalog,
+                    getResources().getStringArray(R.array.donation_google_catalog_values), true, PAYPAL_USER,
+                    PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item), false, null, null, false, null);
+        } else {
+            donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null, null, true, PAYPAL_USER,
+                    PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item), false, null, null, false, null);
+        }
+//        View view = donationsFragment.getView();
+        enterReveal(findViewById(R.id.donations_fragment));
+
+        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
+        findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.pad_advanced, donationsFragment)
+                .commit();
+    }
+
+//  fade animations
+    public Animation fadeInAnimation() {
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+        fadeInAnimation.setDuration(250);
+        return fadeInAnimation;
+    }
+
+    public Animation fadeOutAnimation() {
+        Animation fadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+        fadeOutAnimation.setDuration(200);
+        return fadeOutAnimation;
+    }
+
 //    reveal animations
 
     void enterReveal(View view) {
@@ -584,7 +697,7 @@ public class Calculator extends Activity
         editor.remove(key);
         editor.putString(key, jList.toString());
         editor.commit();
-        Log.d("Prime", "List saved!");
+        Log.d("PNC: ", "List saved!");
     }
 
     public ArrayList<Long> getList(String key) {
@@ -597,7 +710,7 @@ public class Calculator extends Activity
                 for (int i = 0; i < jArray.length(); i++) {
                     list.add(jArray.getLong(i));
                 }
-                Log.d("Prime", "List loaded.");
+                Log.d("PNC: ", "List loaded.");
                 return list;
             } catch (JSONException e) {
                 return getDefaultArray();
@@ -608,8 +721,25 @@ public class Calculator extends Activity
     // Get a default array in the event that there is no array
     // saved or a JSONException occurred
     private ArrayList<Long> getDefaultArray() {
-        Log.d("Prime", "ArrayList not found; creating new one.");
+        Log.d("PNC: ", "ArrayList not found; creating new one.");
         ArrayList<Long> array = new ArrayList<Long>();
         return array;
+    }
+
+    //checks if app is sideloaded or installed from a market
+    public boolean isStoreVersion() {
+        String installer = getPackageManager().getInstallerPackageName(getPackageName());
+        try {
+            if (installer.equals("com.google.android.feedback") || installer.equals("com.android.vending")) {
+                return true;
+            }
+        } catch (Throwable e) {
+        }
+
+        return false;
+    }
+
+    public boolean isPremium() {
+        return mIsPremium;
     }
 }

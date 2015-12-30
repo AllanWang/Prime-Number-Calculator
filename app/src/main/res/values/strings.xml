@@ -74,4 +74,12 @@
 
     <string name="advanced_help_content">Welcome to Prime Number Calculator, my first functional android app! I haven\'t added all the features I wanted yet, so everything is currently quite self explanatory. Type in a number and the app will tell you whether it is prime or not.</string>
 
+    <string-array name="donation_google_catalog_values">
+        <item>$1</item>
+        <item>$2</item>
+        <item>$3</item>
+        <item>$5</item>
+        <item>$10</item>
+    </string-array>
+    <string name="donation_paypal_item">Donation</string>
 </resources>
