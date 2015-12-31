@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -77,7 +78,6 @@ public class Calculator extends FragmentActivity
     private int x = 0;
     private int y = 0;
     SharedPreferences prefs;
-    SharedPreferences themes;
     SharedPreferences.Editor editor;
     IabHelper mHelper;
 
@@ -165,6 +165,7 @@ public class Calculator extends FragmentActivity
     private CalculatorEditText mInputEditText;
     private CalculatorEditText mResultEditText;
     private ViewPager mPadViewPager;
+    private View mPadNumeric;
     private View mDeleteButton;
     private View mClearButton;
     private TextView mHelpVersionName;
@@ -176,9 +177,8 @@ public class Calculator extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
 
+        SharedPreferences themes = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        themes = getSharedPreferences("themes",
-                MODE_PRIVATE);
         prefs = getSharedPreferences("prime",
                 MODE_PRIVATE);
         editor = getSharedPreferences("prime",
@@ -196,9 +196,15 @@ public class Calculator extends FragmentActivity
         mInputEditText = (CalculatorEditText) findViewById(R.id.input);
         mResultEditText = (CalculatorEditText) findViewById(R.id.result);
         mPadViewPager = (ViewPager) findViewById(R.id.pad_pager);
+        mPadNumeric = findViewById(R.id.pad_numeric);
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
         mHelpVersionName = (TextView) findViewById(R.id.help_version_number);
+
+        mDisplayView.setBackgroundColor(themeDisplay);
+        mPadNumeric.setBackgroundColor(themeNumpad);
+        mInputEditText.setTextColor(themeDisplayText);
+        mResultEditText.setTextColor(themeDisplayText);
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[

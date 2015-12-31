@@ -72,18 +72,6 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         x = getArguments().getInt(GETX);
         y = getArguments().getInt(GETY);
 
-        Preference theme = findPreference("themes");
-        theme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                // do whatever you want with new value
-
-                // true to update the state of the Preference with the new value
-                // in case you want to disallow the change return false
-                return true;
-            }
-        });
-
 //        ((ColorPickerPreference) findPreference("color2")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 //
 //            @Override
