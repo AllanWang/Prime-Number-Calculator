@@ -20,37 +20,16 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.content.ContextCompat;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
 public class CalculatorThemesFragment extends PreferenceFragment {
 
-
-    private Callbacks mCallbacks = sDummyCallbacks;
-
-    public interface Callbacks {
-        /*
-         * Callback for when an item has been selected.
-         */
-//        public void onCatagorySelected(String key);
-    }
-
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-//        @Override
-//        public void onCatagorySelected(String key) {
-//        }
-    };
-
-    public CalculatorThemesFragment() {
-    }
     /**
      * Called when the activity is first created.
      */
-    /*@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.themes);
@@ -64,28 +43,15 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 
         });
         ((ColorPickerPreference) findPreference("color2")).setAlphaSliderEnabled(true);
-    }*/
+
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        super.onCreateView(inflater, container, savedInstanceState);
-
-        //just testing to see if the imageview can be accessed.
-        View v = inflater.inflate(R.layout.advanced_themes, container, false);
-
-        addPreferencesFromResource(R.xml.themes);
-        ((ColorPickerPreference) findPreference("color2")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue))));
-                return true;
-            }
-
-        });
-        ((ColorPickerPreference) findPreference("color2")).setAlphaSliderEnabled(true);
-
-        return v;
+        getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pad_advanced_background_color_2));
+        getView().setClickable(true);
     }
+
 }

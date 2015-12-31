@@ -24,6 +24,8 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,11 +70,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Calculator extends FragmentActivity
-        implements OnTextSizeChangeListener, OnLongClickListener, CalculatorThemesFragment.Callbacks {
+        implements OnTextSizeChangeListener, OnLongClickListener {
 
     private static final String NAME = Calculator.class.getName();
     private static final String MARKET_URL = "https://play.google.com/store/apps/details?id=";
     public boolean mIsPremium = false;
+    private boolean onTheme = false;
     private String[] mGoogleCatalog;
     public static ArrayList<Long> list = new ArrayList<Long>();
     private int x = 0;
@@ -295,14 +298,22 @@ public class Calculator extends FragmentActivity
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
             super.onBackPressed();
+        } else if (onTheme) {
+
+            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
+            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
+//            CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
+            getFragmentManager().popBackStack("theme", R.id.root_layout);
+
+            onTheme = false;
         } else if (findViewById(R.id.advanced_themes_layout).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.advanced_themes_layout));
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.help));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.donations_fragment));
-        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
-            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
+//        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
+//            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
         } else {
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
@@ -598,13 +609,19 @@ public class Calculator extends FragmentActivity
 //    for advanced options
 
     public void onTheme() {
+
+        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
+        findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+
         CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
 
-        afterAdvancedPad(findViewById(R.id.advanced_themes_layout));
+//        afterAdvancedPad(findViewById(R.id.advanced_themes_layout));
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.pad_advanced, themesFragment)
+                .replace(R.id.root_layout, themesFragment)
+                .addToBackStack("theme")
                 .commit();
+        onTheme = true;
     }
 
     private void onContact() {
