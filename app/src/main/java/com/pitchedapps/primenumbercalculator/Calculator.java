@@ -614,9 +614,10 @@ public class Calculator extends FragmentActivity
         findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
 
         CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
-
+        themesFragment = CalculatorThemesFragment.newInstance(x, y);
 //        afterAdvancedPad(findViewById(R.id.advanced_themes_layout));
 
+        getFragmentManager().executePendingTransactions();
         getFragmentManager().beginTransaction()
                 .replace(R.id.root_layout, themesFragment)
                 .addToBackStack("theme")
