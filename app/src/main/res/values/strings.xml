@@ -88,4 +88,13 @@
     <!-- Color Picker -->
     <string name="dialog_color_picker">Color Picker</string>
     <string name="press_color_to_apply">Press on Color to apply</string>
+
+    <string name="theme_display">Display Background</string>
+    <string name="theme_display_text">Display Text</string>
+    <string name="theme_clear_accent">Clear Display Accent</string>
+    <string name="theme_numpad">Number Pad Background</string>
+    <string name="theme_numpad_text">Number Pad Text</string>
+    <string name="theme_advanced_numpad">Settings Background</string>
+    <string name="theme_advanced_numpad_text">Settings Text</string>
+    <!--<string name="theme_advanced_numpad_2">Press on Color to apply</string>-->
 </resources>

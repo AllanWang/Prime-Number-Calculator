@@ -18,11 +18,13 @@ package com.pitchedapps.primenumbercalculator;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -33,8 +35,11 @@ import android.view.animation.AnimationUtils;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
+import java.util.prefs.Preferences;
+
 public class CalculatorThemesFragment extends PreferenceFragment {
 
+    SharedPreferences themes;
     // TODO check this
     // http://stackoverflow.com/questions/26819429/cannot-start-this-animator-on-a-detached-view-reveal-effect
 
@@ -67,16 +72,28 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         x = getArguments().getInt(GETX);
         y = getArguments().getInt(GETY);
 
-        ((ColorPickerPreference) findPreference("color2")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
+        Preference theme = findPreference("themes");
+        theme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue))));
+                // do whatever you want with new value
+
+                // true to update the state of the Preference with the new value
+                // in case you want to disallow the change return false
                 return true;
             }
-
         });
-        ((ColorPickerPreference) findPreference("color2")).setAlphaSliderEnabled(true);
+
+//        ((ColorPickerPreference) findPreference("color2")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+//
+//            @Override
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                preference.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue))));
+//                return true;
+//            }
+//
+//        });
+//        ((ColorPickerPreference) findPreference("color2")).setAlphaSliderEnabled(true);
 
     }
 
@@ -94,7 +111,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 //                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 //                    ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
 //                    if(viewTreeObserver.isAlive())
-//
+//                    Log.d("PNC: ", "viewTree is alive");
 //                    {
 //                        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                            @Override

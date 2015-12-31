@@ -24,9 +24,6 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -43,7 +40,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -81,6 +77,7 @@ public class Calculator extends FragmentActivity
     private int x = 0;
     private int y = 0;
     SharedPreferences prefs;
+    SharedPreferences themes;
     SharedPreferences.Editor editor;
     IabHelper mHelper;
 
@@ -102,6 +99,15 @@ public class Calculator extends FragmentActivity
     // instance state keys
     private static final String KEY_CURRENT_STATE = NAME + "_currentState";
     private static final String KEY_CURRENT_EXPRESSION = NAME + "_currentExpression";
+
+    // for theming
+    int themeDisplay;
+    int themeDisplayText;
+    int themeClearAccent;
+    int themeNumpad;
+    int themeNumpadText;
+    int themeAdvancedNumpad;
+    int themeAdvancedNumpadText;
 
 
     private enum CalculatorState {
@@ -171,10 +177,20 @@ public class Calculator extends FragmentActivity
         setContentView(R.layout.activity_calculator);
 
 
+        themes = getSharedPreferences("themes",
+                MODE_PRIVATE);
         prefs = getSharedPreferences("prime",
                 MODE_PRIVATE);
         editor = getSharedPreferences("prime",
                 MODE_PRIVATE).edit();
+
+        themeDisplay = themes.getInt("theme_display", 0xFFFFFFFF);
+        themeDisplayText = themes.getInt("theme_display_text", 0xFF000000);
+        themeClearAccent = themes.getInt("theme_clear_accent", 0xFF00BCD4);
+        themeNumpad = themes.getInt("theme_numpad", 0xFF434343);
+        themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);
+        themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
+        themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
 
         mDisplayView = findViewById(R.id.display);
         mInputEditText = (CalculatorEditText) findViewById(R.id.input);
@@ -302,8 +318,8 @@ public class Calculator extends FragmentActivity
 
             findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
             findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
-//            CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
-            getFragmentManager().popBackStack("theme", R.id.root_layout);
+//            getFragmentManager().popBackStack("theme", R.id.root_layout);
+            getFragmentManager().popBackStackImmediate(); //appears to working as opposed to the line above
 
             onTheme = false;
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){

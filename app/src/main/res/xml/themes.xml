@@ -2,27 +2,46 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/pref_category">
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:key="color1"
-            android:title="@string/color1_title"
-            android:summary="@string/color1_summary"
-            android:defaultValue="@integer/COLOR_BLACK" />
+            android:key="theme_display"
+            android:title="@string/theme_display"
+            android:defaultValue="0xFFFFFFFF"
+            alphaSlider="false"
+            hexValue="true"/>
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:key="color2"
-            android:persistent="false"
-            android:title="@string/color2_title"
-            android:summary="@string/color2_summary"
-            android:defaultValue="@integer/COLOR_GREEN" />
+            android:key="theme_display_text"
+            android:title="@string/theme_display_text"
+            android:defaultValue="0xFF000000"
+            alphaSlider="false"
+            hexValue="true"/>
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:key="color3"
-            android:title="@string/color3_title"
-            android:summary="@string/color3_summary"
-            android:defaultValue="@integer/COLOR_GREEN"
-            alphaSlider="true" />
+            android:key="theme_clear_accent"
+            android:title="@string/theme_clear_accent"
+            android:defaultValue="0xFF00BCD4"
+            alphaSlider="false"
+            hexValue="true"/>
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:key="color4"
-            android:persistent="false"
-            android:title="@string/color4_title"
-            android:summary="@string/color4_summary"
-            android:defaultValue="0xff0000ff" />
+            android:key="theme_numpad"
+            android:title="@string/theme_numpad"
+            android:defaultValue="0xFF434343"
+            alphaSlider="false"
+            hexValue="true"/>
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="theme_numpad_text"
+            android:title="@string/theme_numpad_text"
+            android:defaultValue="0xFFFFFFFF"
+            alphaSlider="false"
+            hexValue="true"/>
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="theme_advanced_numpad"
+            android:title="@string/theme_advanced_numpad"
+            android:defaultValue="0xFF1DE9B6"
+            alphaSlider="false"
+            hexValue="true"/>
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="theme_advanced_numpad_text"
+            android:title="@string/theme_advanced_numpad_text"
+            android:defaultValue="0x91000000"
+            alphaSlider="false"
+            hexValue="true"/>
     </PreferenceCategory>
 </PreferenceScreen>
