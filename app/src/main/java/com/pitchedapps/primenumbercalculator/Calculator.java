@@ -306,8 +306,6 @@ public class Calculator extends FragmentActivity
             getFragmentManager().popBackStack("theme", R.id.root_layout);
 
             onTheme = false;
-        } else if (findViewById(R.id.advanced_themes_layout).getVisibility() == View.VISIBLE){
-            backToAdvancedPad(findViewById(R.id.advanced_themes_layout));
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.help));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
@@ -615,7 +613,6 @@ public class Calculator extends FragmentActivity
 
         CalculatorThemesFragment themesFragment = CalculatorThemesFragment.newInstance(x, y);
 
-//        afterAdvancedPad(findViewById(R.id.advanced_themes_layout));
 //        View view = CalculatorThemesFragment.getView();
 //        enterReveal(view);
 

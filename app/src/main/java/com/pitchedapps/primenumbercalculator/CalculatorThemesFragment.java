@@ -81,34 +81,34 @@ public class CalculatorThemesFragment extends PreferenceFragment {
     }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        final View rootLayout = view;
-
-        if (savedInstanceState == null) {
-            rootLayout.setVisibility(View.INVISIBLE);
-            view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
-                    if(viewTreeObserver.isAlive())
-
-                    {
-                        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                            @Override
-                            public void onGlobalLayout() {
-                                enterReveal(rootLayout);
-                            }
-                        });
-                    }
-                }
-            });
-        }
-
-        return view;
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        View view = super.onCreateView(inflater, container, savedInstanceState);
+//        final View rootLayout = view;
+//
+//        if (savedInstanceState == null) {
+//            rootLayout.setVisibility(View.INVISIBLE);
+//            view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//                @Override
+//                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                    ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
+//                    if(viewTreeObserver.isAlive())
+//
+//                    {
+//                        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                            @Override
+//                            public void onGlobalLayout() {
+//                                enterReveal(rootLayout);
+//                            }
+//                        });
+//                    }
+//                }
+//            });
+//        }
+//
+//        return view;
+//    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
