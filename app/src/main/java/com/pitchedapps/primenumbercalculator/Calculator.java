@@ -613,9 +613,11 @@ public class Calculator extends FragmentActivity
         findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
         findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
 
-        CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
-        themesFragment = CalculatorThemesFragment.newInstance(x, y);
+        CalculatorThemesFragment themesFragment = CalculatorThemesFragment.newInstance(x, y);
+
 //        afterAdvancedPad(findViewById(R.id.advanced_themes_layout));
+//        View view = CalculatorThemesFragment.getView();
+//        enterReveal(view);
 
         getFragmentManager().executePendingTransactions();
         getFragmentManager().beginTransaction()

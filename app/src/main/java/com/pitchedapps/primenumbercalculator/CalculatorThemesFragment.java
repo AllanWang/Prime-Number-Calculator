@@ -81,14 +81,14 @@ public class CalculatorThemesFragment extends PreferenceFragment {
     }
 
 
-    /*@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         final View rootLayout = view;
+
         if (savedInstanceState == null) {
             rootLayout.setVisibility(View.INVISIBLE);
-
             view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -108,7 +108,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         }
 
         return view;
-    }*/
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -118,34 +118,27 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         getView().setClickable(true);
     }
 
-    @Override
-    public Animator onCreateAnimator (int transit, boolean enter, int nextAnim) {
-        Animator anim;
-        View view = getView();
-        if (enter) {
-            anim = enterReveal(view);
-        } else {
-            anim = exitReveal(view);
-        };
+//    @Override
+//    public Animator onCreateAnimator (int transit, boolean enter, int nextAnim) {
+//        Animator anim;
+//        View view = getView();
+//        if (enter) {
+//            anim = enterReveal(view);
+//        } else {
+//            anim = exitReveal(view);
+//        };
+//
+//        return anim;
+//    }
 
-        return anim;
-    }
+//    private Runnable animator = new Runnable(){
+//        View view = getView();
+//        @Override
+//        public void run() {
+//            enterReveal(view);
+//        }
+//    };
 
-    /*void enterReveal(View view) {
-        // previously invisible view
-        final View myView = view;
-
-        // get the final radius for the clipping circle
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(myView, x, y, 0, finalRadius).setDuration(600);
-
-        // make the view visible and start the animation
-        myView.setVisibility(View.VISIBLE);
-        anim.start();
-    }*/
 
     Animator enterReveal(View view) {
         // previously invisible view
