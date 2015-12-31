@@ -82,4 +82,10 @@
         <item>$10</item>
     </string-array>
     <string name="donation_paypal_item">Donation</string>
+
+
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">Color Picker</string>
+    <string name="press_color_to_apply">Press on Color to apply</string>
 </resources>

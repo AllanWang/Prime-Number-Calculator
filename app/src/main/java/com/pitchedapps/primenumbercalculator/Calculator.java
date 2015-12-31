@@ -24,6 +24,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -40,6 +41,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -271,11 +273,11 @@ public class Calculator extends FragmentActivity
             mCurrentState = state;
 
             if (state == CalculatorState.RESULT) {
-                mDeleteButton.setVisibility(View.GONE);
+                mDeleteButton.setVisibility(View.INVISIBLE);
                 mClearButton.setVisibility(View.VISIBLE);
             } else {
                 mDeleteButton.setVisibility(View.VISIBLE);
-                mClearButton.setVisibility(View.GONE);
+                mClearButton.setVisibility(View.INVISIBLE);
             }
 
             mInputEditText.setTextColor(
@@ -293,6 +295,8 @@ public class Calculator extends FragmentActivity
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
             super.onBackPressed();
+//        } else if (findViewById(R.id.advanced_themes_layout).getVisibility() == View.VISIBLE){
+//            backToAdvancedPad(findViewById(R.id.advanced_themes_layout));
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.help));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
@@ -342,7 +346,8 @@ public class Calculator extends FragmentActivity
                 onClear();
                 break;
             case R.id.advanced_themes:
-                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                onTheme();
                 break;
             case R.id.advanced_clear_list:
                 ArrayList<Long> empty = new ArrayList<>();
@@ -386,7 +391,8 @@ public class Calculator extends FragmentActivity
                 startActivity(github);
                 break;
             case R.id.advanced_credits:
-                onCredits();
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+//                onCredits(); //TODO fix this
                 break;
             case R.id.advanced_donate:
                 onDonate();
@@ -589,6 +595,17 @@ public class Calculator extends FragmentActivity
     }
 
 //    for advanced options
+
+    public void onTheme() {
+        CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
+
+        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
+        findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.pad_advanced, themesFragment)
+                .commit();
+    }
 
     private void onContact() {
         StringBuilder emailBuilder = new StringBuilder();
