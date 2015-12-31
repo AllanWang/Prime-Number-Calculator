@@ -178,7 +178,6 @@ public class Calculator extends FragmentActivity
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
         mHelpVersionName = (TextView) findViewById(R.id.help_version_number);
-//        mBack = (TextView) findViewById(R.id.back);
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
@@ -636,13 +635,13 @@ public class Calculator extends FragmentActivity
     }
 
     public void onCredits() {
-//        CalculatorCreditsActivity creditsFragment = new CalculatorCreditsActivity();
+        CalculatorCreditsFragment creditsFragment = new CalculatorCreditsFragment();
 
-        afterAdvancedPad(findViewById(R.id.advanced_credits));
+        afterAdvancedPad(findViewById(R.id.advanced_credits_layout));
 
-//        getFragmentManager().beginTransaction()
-//                .replace(R.id.pad_advanced, creditsFragment)
-//                .commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.pad_advanced, creditsFragment)
+                .commit();
     }
 
 //  fade animations
