@@ -68,7 +68,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Calculator extends FragmentActivity
-        implements OnTextSizeChangeListener, OnLongClickListener {
+        implements OnTextSizeChangeListener, OnLongClickListener, CalculatorThemesFragment.Callbacks {
 
     private static final String NAME = Calculator.class.getName();
     private static final String MARKET_URL = "https://play.google.com/store/apps/details?id=";
@@ -273,11 +273,11 @@ public class Calculator extends FragmentActivity
             mCurrentState = state;
 
             if (state == CalculatorState.RESULT) {
-                mDeleteButton.setVisibility(View.INVISIBLE);
+                mDeleteButton.setVisibility(View.GONE);
                 mClearButton.setVisibility(View.VISIBLE);
             } else {
                 mDeleteButton.setVisibility(View.VISIBLE);
-                mClearButton.setVisibility(View.INVISIBLE);
+                mClearButton.setVisibility(View.GONE);
             }
 
             mInputEditText.setTextColor(
@@ -295,8 +295,8 @@ public class Calculator extends FragmentActivity
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
             super.onBackPressed();
-//        } else if (findViewById(R.id.advanced_themes_layout).getVisibility() == View.VISIBLE){
-//            backToAdvancedPad(findViewById(R.id.advanced_themes_layout));
+        } else if (findViewById(R.id.advanced_themes_layout).getVisibility() == View.VISIBLE){
+            backToAdvancedPad(findViewById(R.id.advanced_themes_layout));
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.help));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
@@ -325,6 +325,7 @@ public class Calculator extends FragmentActivity
 
         if (mPadViewPager.getCurrentItem() != 0) {
 
+            addOnTouchListener(findViewById(R.id.advanced_themes));
             addOnTouchListener(findViewById(R.id.advanced_help));
             addOnTouchListener(findViewById(R.id.advanced_donate));
             addOnTouchListenerText(findViewById(R.id.back_help));
@@ -599,8 +600,7 @@ public class Calculator extends FragmentActivity
     public void onTheme() {
         CalculatorThemesFragment themesFragment = new CalculatorThemesFragment();
 
-        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
-        findViewById(R.id.pad_advanced).startAnimation(fadeOutAnimation());
+        afterAdvancedPad(findViewById(R.id.advanced_themes_layout));
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.pad_advanced, themesFragment)
