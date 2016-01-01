@@ -826,7 +826,7 @@ public class Calculator extends FragmentActivity
         } catch (Throwable e) {
         }
 
-        return false;
+        return true;
     }
 
     public void themeEngine() {

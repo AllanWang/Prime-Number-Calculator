@@ -56,7 +56,6 @@
         <item name="android:padding">6.0dip</item>
         <item name="android:minHeight">0dip</item>
         <item name="android:minWidth">0dip</item>
-        <item name="android:background">@drawable/advanced_button_background</item>
         <item name="android:textColor">@color/pad_button_advanced_text_color</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>

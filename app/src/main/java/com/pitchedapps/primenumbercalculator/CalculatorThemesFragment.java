@@ -95,12 +95,9 @@ public class CalculatorThemesFragment extends PreferenceFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
 
-//        Button btn = new Button(getActivity().getApplicationContext(), null, android.R.style.Widget_Material_Button_Borderless);
         Button btn = new Button(getActivity().getApplicationContext());
         btn.setText("Reboot Now");
 
-//        btn.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        btn.setPadding(6, 6, 6, 6);
         btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0x91000000));
         btn.setBackgroundColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad", 0xFF1DE9B6));
 //        btn.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
@@ -168,14 +165,6 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 //        return anim;
 //    }
 
-//    private Runnable animator = new Runnable(){
-//        View view = getView();
-//        @Override
-//        public void run() {
-//            enterReveal(view);
-//        }
-//    };
-
 
     Animator enterReveal(View view) {
         // previously invisible view
@@ -188,7 +177,6 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(myView, x, y, 0, finalRadius).setDuration(600);
 
-        // make the view visible and start the animation
         return anim;
     }
 
@@ -202,18 +190,6 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         // create the animation (the final radius is zero)
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(myView, x, y, initialRadius, 0).setDuration(600);
-
-//        // make the view invisible when the animation is done
-//        anim.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//                myView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//        // start the animation
-//        anim.start();
 
         return anim;
     }

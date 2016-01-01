@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,8 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -144,6 +148,7 @@ public class CalculatorDonationsFragment extends Fragment {
             // choose donation amount
             mGoogleSpinner = (Spinner) getActivity().findViewById(
                     org.sufficientlysecure.donations.R.id.donations__google_android_market_spinner);
+
             ArrayAdapter<CharSequence> adapter;
             if (mDebug) {
                 adapter = new ArrayAdapter<CharSequence>(getActivity(),
@@ -356,21 +361,45 @@ public class CalculatorDonationsFragment extends Fragment {
         themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
         themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
 
+        GradientDrawable buttonDrawable = new GradientDrawable(); //needed to add background color as well as radius to button
+        buttonDrawable.setColor(themeAdvancedNumpad);
+        buttonDrawable.setCornerRadius(10);
+
         //donations section
 
-        ((TextView) getActivity().findViewById(R.id.back_donate)).setTextColor(themeAdvancedNumpadText);
+                ((TextView) getActivity().findViewById(R.id.back_donate)).setTextColor(themeAdvancedNumpadText);
         ((TextView) getActivity().findViewById(R.id.donations_fragment_title)).setTextColor(themeAdvancedNumpadText);
         if (mGoogleEnabled) {
             ((TextView) getActivity().findViewById(R.id.donations_google_title)).setTextColor(themeAdvancedNumpadText);
             ((TextView) getActivity().findViewById(R.id.donations_google_desc)).setTextColor(themeAdvancedNumpadText);
-//            ((Spinner) getActivity().findViewById(R.id.donations__google_android_market_spinner)).setTextColor(themeAdvancedNumpadText);
+//            TextView spinnerText = (TextView) mGoogleSpinner.getChildAt(0);
+//            spinnerText.setTextColor(themeAdvancedNumpadText);
+//            mGoogleSpinner.setBackgroundColor(themeAdvancedNumpad);
+
+            mGoogleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    ((TextView) parentView.getChildAt(0)).setTextColor(themeAdvancedNumpadText);
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+//            ((CheckedTextView) getActivity().findViewById(android.R.id.text1)).setTextColor(themeAdvancedNumpadText);
+
             ((Button) getActivity().findViewById(R.id.donations__google_android_market_donate_button)).setTextColor(themeAdvancedNumpadText);
+            getActivity().findViewById(R.id.donations__google_android_market_donate_button).setBackground(buttonDrawable);
         }
 
         ((TextView) getActivity().findViewById(R.id.donations_paypal_title)).setTextColor(themeAdvancedNumpadText);
         ((TextView) getActivity().findViewById(R.id.donations_paypal_desc)).setTextColor(themeAdvancedNumpadText);
         ((Button) getActivity().findViewById(R.id.donations__paypal_donate_button)).setTextColor(themeAdvancedNumpadText);
-        getActivity().findViewById(R.id.donations__paypal_donate_button).setBackgroundColor(themeAdvancedNumpad);
+        getActivity().findViewById(R.id.donations__paypal_donate_button).setBackground(buttonDrawable);
     }
 
 }
