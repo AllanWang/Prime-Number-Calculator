@@ -5,6 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/donations_google_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
@@ -13,6 +14,7 @@
         android:fontFamily="sans-serif-light"/>
 
     <TextView
+        android:id="@+id/donations_google_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"

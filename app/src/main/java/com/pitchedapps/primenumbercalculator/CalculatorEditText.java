@@ -17,11 +17,13 @@
 package com.pitchedapps.primenumbercalculator;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Rect;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
@@ -95,6 +97,7 @@ public class CalculatorEditText extends EditText {
         if (isFocusable()) {
             setMovementMethod(ScrollingMovementMethod.getInstance());
         }
+
         setTextSize(TypedValue.COMPLEX_UNIT_PX, mMaximumTextSize);
         setMinHeight(getLineHeight() + getCompoundPaddingBottom() + getCompoundPaddingTop());
     }

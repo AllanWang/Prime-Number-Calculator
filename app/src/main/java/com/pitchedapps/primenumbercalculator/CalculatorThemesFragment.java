@@ -18,13 +18,16 @@ package com.pitchedapps.primenumbercalculator;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -32,6 +35,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
@@ -68,6 +73,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.themes);
+        getActivity().setTheme(R.style.ThemesSection);
 
         x = getArguments().getInt(GETX);
         y = getArguments().getInt(GETY);
@@ -85,6 +91,32 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
+
+//        Button btn = new Button(getActivity().getApplicationContext(), null, android.R.style.Widget_Material_Button_Borderless);
+        Button btn = new Button(getActivity().getApplicationContext());
+        btn.setText("Reboot Now");
+
+//        btn.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        btn.setPadding(6, 6, 6, 6);
+        btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0x91000000));
+        btn.setBackgroundColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad", 0xFF1DE9B6));
+//        btn.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+
+        v.addView(btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = getActivity().getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+        });
+
+        return v;
+    }
 
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container,

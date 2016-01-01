@@ -58,7 +58,6 @@ import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChange
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.sufficientlysecure.donations.DonationsFragment;
 import org.sufficientlysecure.donations.google.util.IabHelper;
 import org.sufficientlysecure.donations.google.util.IabResult;
 import org.sufficientlysecure.donations.google.util.Inventory;
@@ -165,7 +164,6 @@ public class Calculator extends FragmentActivity
     private CalculatorEditText mInputEditText;
     private CalculatorEditText mResultEditText;
     private ViewPager mPadViewPager;
-    private View mPadNumeric;
     private View mDeleteButton;
     private View mClearButton;
     private TextView mHelpVersionName;
@@ -177,34 +175,20 @@ public class Calculator extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
 
-        SharedPreferences themes = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
         prefs = getSharedPreferences("prime",
                 MODE_PRIVATE);
         editor = getSharedPreferences("prime",
                 MODE_PRIVATE).edit();
 
-        themeDisplay = themes.getInt("theme_display", 0xFFFFFFFF);
-        themeDisplayText = themes.getInt("theme_display_text", 0xFF000000);
-        themeClearAccent = themes.getInt("theme_clear_accent", 0xFF00BCD4);
-        themeNumpad = themes.getInt("theme_numpad", 0xFF434343);
-        themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);
-        themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
-        themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
+        themeEngine();
 
         mDisplayView = findViewById(R.id.display);
         mInputEditText = (CalculatorEditText) findViewById(R.id.input);
         mResultEditText = (CalculatorEditText) findViewById(R.id.result);
         mPadViewPager = (ViewPager) findViewById(R.id.pad_pager);
-        mPadNumeric = findViewById(R.id.pad_numeric);
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
         mHelpVersionName = (TextView) findViewById(R.id.help_version_number);
-
-        mDisplayView.setBackgroundColor(themeDisplay);
-        mPadNumeric.setBackgroundColor(themeNumpad);
-        mInputEditText.setTextColor(themeDisplayText);
-        mResultEditText.setTextColor(themeDisplayText);
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
@@ -673,14 +657,14 @@ public class Calculator extends FragmentActivity
     }
 
     public void onDonate() {
-        DonationsFragment donationsFragment;
+        CalculatorDonationsFragment donationsFragment;
         if (isStoreVersion()) {
-            donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, true, GOOGLE_PUBKEY, mGoogleCatalog,
+            donationsFragment = CalculatorDonationsFragment.newInstance(BuildConfig.DEBUG, true, GOOGLE_PUBKEY, mGoogleCatalog,
                     getResources().getStringArray(R.array.donation_google_catalog_values), true, PAYPAL_USER,
-                    PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item), false, null, null, false, null);
+                    PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item));
         } else {
-            donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null, null, true, PAYPAL_USER,
-                    PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item), false, null, null, false, null);
+            donationsFragment = CalculatorDonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null, null, true, PAYPAL_USER,
+                    PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item));
         }
 
         afterAdvancedPad(findViewById(R.id.donations_fragment));
@@ -843,6 +827,65 @@ public class Calculator extends FragmentActivity
         }
 
         return false;
+    }
+
+    public void themeEngine() {
+
+        SharedPreferences themes = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        themeDisplay = themes.getInt("theme_display", 0xFFFFFFFF);
+        themeDisplayText = themes.getInt("theme_display_text", 0xFF000000);
+        themeClearAccent = themes.getInt("theme_clear_accent", 0xFF00BCD4);
+        themeNumpad = themes.getInt("theme_numpad", 0xFF434343);
+        themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);
+        themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
+        themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
+
+
+        findViewById(R.id.display).setBackgroundColor(themeDisplay);
+        findViewById(R.id.pad_numeric).setBackgroundColor(themeNumpad);
+        findViewById(R.id.root_layout).setBackgroundColor(themeAdvancedNumpad);
+//        mInputEditText.setTextColor(themeDisplayText);
+//        mResultEditText.setTextColor(themeDisplayText);
+
+        //numpad section
+
+        ((Button) findViewById(R.id.del)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.clr)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.eq)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_0)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_1)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_2)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_3)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_4)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_5)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_6)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_7)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_8)).setTextColor(themeNumpadText);
+        ((Button) findViewById(R.id.digit_9)).setTextColor(themeNumpadText);
+
+        //settings/advancedpad section
+
+        ((Button) findViewById(R.id.advanced_themes)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_clear_list)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_help)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_contact_me)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_rate_app)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_share_app)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_about_dev)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_other_apps)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_google_plus)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_source)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_credits)).setTextColor(themeAdvancedNumpadText);
+        ((Button) findViewById(R.id.advanced_donate)).setTextColor(themeAdvancedNumpadText);
+
+        //donations theming done in donations fragment
+
+        //help section
+
+        ((TextView) findViewById(R.id.help_text)).setTextColor(themeAdvancedNumpadText);
+        ((TextView) findViewById(R.id.help_version_number)).setTextColor(themeAdvancedNumpadText);
+        ((TextView) findViewById(R.id.back_help)).setTextColor(themeAdvancedNumpadText);
     }
 
     public boolean isPremium() {
