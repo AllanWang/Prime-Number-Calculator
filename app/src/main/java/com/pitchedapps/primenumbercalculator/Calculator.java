@@ -29,12 +29,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -184,8 +186,6 @@ public class Calculator extends FragmentActivity
         editor = getSharedPreferences("prime",
                 MODE_PRIVATE).edit();
 
-        themeEngine();
-
         mDisplayView = findViewById(R.id.display);
         mInputEditText = (CalculatorEditText) findViewById(R.id.input);
         mResultEditText = (CalculatorEditText) findViewById(R.id.result);
@@ -193,6 +193,8 @@ public class Calculator extends FragmentActivity
         mDeleteButton = findViewById(R.id.del);
         mClearButton = findViewById(R.id.clr);
         mHelpVersionName = (TextView) findViewById(R.id.help_version_number);
+
+        themeEngine();
 
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
@@ -224,13 +226,13 @@ public class Calculator extends FragmentActivity
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 
                 if (inventory != null) {
-                    Log.d("PNC: ", "IAP inventory exists");
-
-                    Log.d("PNC: ", "Donations 1 is " + inventory.hasPurchase("prime.donation.1"));
-                    Log.d("PNC: ", "Donations 2 is " + inventory.hasPurchase("prime.donation.2"));
-                    Log.d("PNC: ", "Donations 3 is " + inventory.hasPurchase("prime.donation.3"));
-                    Log.d("PNC: ", "Donations 5 is " + inventory.hasPurchase("prime.donation.5"));
-                    Log.d("PNC: ", "Donations 10 is " + inventory.hasPurchase("prime.donation.10"));
+//                    Log.d("PNC: ", "IAP inventory exists");
+//
+//                    Log.d("PNC: ", "Donations 1 is " + inventory.hasPurchase("prime.donation.1"));
+//                    Log.d("PNC: ", "Donations 2 is " + inventory.hasPurchase("prime.donation.2"));
+//                    Log.d("PNC: ", "Donations 3 is " + inventory.hasPurchase("prime.donation.3"));
+//                    Log.d("PNC: ", "Donations 5 is " + inventory.hasPurchase("prime.donation.5"));
+//                    Log.d("PNC: ", "Donations 10 is " + inventory.hasPurchase("prime.donation.10"));
 
                     if (inventory.hasPurchase("prime.donation.1") ||
                             inventory.hasPurchase("prime.donation.2") ||
@@ -852,17 +854,17 @@ public class Calculator extends FragmentActivity
         themeNumpad = themes.getInt("theme_numpad", 0xFF434343);
         themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);
         themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
-
         themeAdvancedNumpadText = ColorUtils.setAlphaComponent(themes.getInt("theme_advanced_numpad_text", 0xFF000000), 145); //91 transparency
 
-
+//        CalculatorPadViewPager.setNumpadCacheColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(this, android.R.color.black), (new ColorDrawable(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt("theme_numpad", 0xFF434343))).getAlpha()));
+        CalculatorPadViewPager.setNumpadCacheColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(this, android.R.color.black), (new ColorDrawable(themeNumpad)).getAlpha()));
         //display view
 
-        findViewById(R.id.display).setBackgroundColor(themeDisplay);
+        mDisplayView.setBackgroundColor(themeDisplay);
         findViewById(R.id.pad_numeric).setBackgroundColor(themeNumpad);
         findViewById(R.id.root_layout).setBackgroundColor(themeAdvancedNumpad);
-        ((CalculatorEditText) findViewById(R.id.input)).setTextColor(themeDisplayInput);
-        ((CalculatorEditText) findViewById(R.id.result)).setTextColor(themeDisplayResult);
+        mInputEditText.setTextColor(themeDisplayInput);
+        mResultEditText.setTextColor(themeDisplayResult);
         getWindow().setStatusBarColor(themeClearAccent);
 
         //numpad section
