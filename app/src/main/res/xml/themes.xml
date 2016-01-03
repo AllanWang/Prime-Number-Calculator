@@ -4,7 +4,7 @@
         android:key="theme_display"
         android:title="@string/theme_display"
         android:defaultValue="0xFFFFFFFF"
-        alphaSlider="false"
+        alphaSlider="true"
         hexValue="true"/>
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="theme_display_text"
@@ -16,13 +16,13 @@
         android:key="theme_clear_accent"
         android:title="@string/theme_clear_accent"
         android:defaultValue="0xFF00BCD4"
-        alphaSlider="false"
+        alphaSlider="true"
         hexValue="true"/>
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="theme_numpad"
         android:title="@string/theme_numpad"
         android:defaultValue="0xFF434343"
-        alphaSlider="false"
+        alphaSlider="true"
         hexValue="true"/>
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="theme_numpad_text"
@@ -34,12 +34,12 @@
         android:key="theme_advanced_numpad"
         android:title="@string/theme_advanced_numpad"
         android:defaultValue="0xFF1DE9B6"
-        alphaSlider="false"
+        alphaSlider="true"
         hexValue="true"/>
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="theme_advanced_numpad_text"
         android:title="@string/theme_advanced_numpad_text"
-        android:defaultValue="0x91000000"
+        android:defaultValue="0xFF000000"
         alphaSlider="false"
         hexValue="true"/>
 </PreferenceScreen>

@@ -42,7 +42,9 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="@string/press_color_to_apply"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#fff"/>
 
         <EditText
             android:id="@+id/hex_val"
@@ -76,7 +78,8 @@
             android:layout_marginRight="10dp"
             android:gravity="center"
             android:text="→"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#fff" />
 
         <net.margaritov.preference.colorpicker.ColorPickerPanelView
             android:id="@+id/new_color_panel"

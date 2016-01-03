@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -72,6 +73,7 @@ public class Calculator extends FragmentActivity
     private static final String MARKET_URL = "https://play.google.com/store/apps/details?id=";
     public boolean mIsPremium = false;
     private boolean onTheme = false;
+    private boolean subSetting = false;
     private String[] mGoogleCatalog;
     public static ArrayList<Long> list = new ArrayList<Long>();
     private int x = 0;
@@ -102,6 +104,8 @@ public class Calculator extends FragmentActivity
     // for theming
     int themeDisplay;
     int themeDisplayText;
+    int themeDisplayInput;
+    int themeDisplayResult;
     int themeClearAccent;
     int themeNumpad;
     int themeNumpadText;
@@ -222,19 +226,17 @@ public class Calculator extends FragmentActivity
                 if (inventory != null) {
                     Log.d("PNC: ", "IAP inventory exists");
 
-                    Log.d("PNC: ", "Donations 1 is " + inventory.hasPurchase("glass.donation.1"));
-                    Log.d("PNC: ", "Donations 2 is " + inventory.hasPurchase("glass.donation.2"));
-                    Log.d("PNC: ", "Donations 3 is " + inventory.hasPurchase("glass.donation.3"));
-                    Log.d("PNC: ", "Donations 5 is " + inventory.hasPurchase("glass.donation.5"));
-                    Log.d("PNC: ", "Donations 10 is " + inventory.hasPurchase("glass.donation.10"));
-                    Log.d("PNC: ", "Donations 20 is " + inventory.hasPurchase("glass.donation.20"));
+                    Log.d("PNC: ", "Donations 1 is " + inventory.hasPurchase("prime.donation.1"));
+                    Log.d("PNC: ", "Donations 2 is " + inventory.hasPurchase("prime.donation.2"));
+                    Log.d("PNC: ", "Donations 3 is " + inventory.hasPurchase("prime.donation.3"));
+                    Log.d("PNC: ", "Donations 5 is " + inventory.hasPurchase("prime.donation.5"));
+                    Log.d("PNC: ", "Donations 10 is " + inventory.hasPurchase("prime.donation.10"));
 
-                    if (inventory.hasPurchase("glass.donation.1") ||
-                            inventory.hasPurchase("glass.donation.2") ||
-                            inventory.hasPurchase("glass.donation.3") ||
-                            inventory.hasPurchase("glass.donation.5") ||
-                            inventory.hasPurchase("glass.donation.10") ||
-                            inventory.hasPurchase("glass.donation.20")) {
+                    if (inventory.hasPurchase("prime.donation.1") ||
+                            inventory.hasPurchase("prime.donation.2") ||
+                            inventory.hasPurchase("prime.donation.3") ||
+                            inventory.hasPurchase("prime.donation.5") ||
+                            inventory.hasPurchase("prime.donation.10")) {
                         Log.d("PNC: ", "IAP inventory contains a donation");
 
                         mIsPremium = true;
@@ -293,28 +295,18 @@ public class Calculator extends FragmentActivity
 
     @Override
     public void onBackPressed() {
+        backToSettings();
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
             // allow the system to handle the Back button.
             super.onBackPressed();
-        } else if (onTheme) {
-
-            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
-            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
-//            getFragmentManager().popBackStack("theme", R.id.root_layout);
-            getFragmentManager().popBackStackImmediate(); //appears to working as opposed to the line above
-
-            onTheme = false;
-        } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
-            backToAdvancedPad(findViewById(R.id.help));
-        } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
-            backToAdvancedPad(findViewById(R.id.donations_fragment));
-//        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
-//            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
-        } else {
+        } else if (subSetting == false) { // only run if current view is not a subSetting
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
+            Log.d("PNC ", "back ran");
         }
+
+        subSetting = false; //make boolean back to original
     }
 
     public void onBackPressed(View v) {
@@ -340,6 +332,11 @@ public class Calculator extends FragmentActivity
             addOnTouchListenerText(findViewById(R.id.back_donate));
 //            addOnTouchListenerText(findViewById(R.id.back_credits));
 
+        }
+
+        if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
+            backToSettings();
+            subSetting = false; //make boolean back to original
         }
     }
 
@@ -822,25 +819,50 @@ public class Calculator extends FragmentActivity
         return true;
     }
 
+    public void backToSettings() {
+        subSetting = true;
+        if (onTheme) {
+
+            findViewById(R.id.pad_advanced).setVisibility(View.VISIBLE);
+            findViewById(R.id.pad_advanced).startAnimation(fadeInAnimation());
+//            getFragmentManager().popBackStack("theme", R.id.root_layout);
+            getFragmentManager().popBackStackImmediate(); //appears to working as opposed to the line above
+
+            onTheme = false;
+        } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
+            backToAdvancedPad(findViewById(R.id.help));
+        } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
+            backToAdvancedPad(findViewById(R.id.donations_fragment));
+//        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
+//            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
+        } else {
+            subSetting = false;
+        }
+    }
+
     public void themeEngine() {
 
         SharedPreferences themes = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         themeDisplay = themes.getInt("theme_display", 0xFFFFFFFF);
         themeDisplayText = themes.getInt("theme_display_text", 0xFF000000);
+        themeDisplayInput = ColorUtils.setAlphaComponent(themeNumpadText, 138); //8A transparency
+        themeDisplayResult = ColorUtils.setAlphaComponent(themeNumpadText, 108); //6C transparency
         themeClearAccent = themes.getInt("theme_clear_accent", 0xFF00BCD4);
         themeNumpad = themes.getInt("theme_numpad", 0xFF434343);
         themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);
         themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
-        themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
+
+        themeAdvancedNumpadText = ColorUtils.setAlphaComponent(themes.getInt("theme_advanced_numpad_text", 0xFF000000), 145); //91 transparency
+
 
         //display view
 
         findViewById(R.id.display).setBackgroundColor(themeDisplay);
         findViewById(R.id.pad_numeric).setBackgroundColor(themeNumpad);
         findViewById(R.id.root_layout).setBackgroundColor(themeAdvancedNumpad);
-        ((CalculatorEditText) findViewById(R.id.input)).setTextColor(themeDisplayText);
-        ((CalculatorEditText) findViewById(R.id.result)).setTextColor(themeDisplayText);
+        ((CalculatorEditText) findViewById(R.id.input)).setTextColor(themeDisplayInput);
+        ((CalculatorEditText) findViewById(R.id.result)).setTextColor(themeDisplayResult);
         getWindow().setStatusBarColor(themeClearAccent);
 
         //numpad section

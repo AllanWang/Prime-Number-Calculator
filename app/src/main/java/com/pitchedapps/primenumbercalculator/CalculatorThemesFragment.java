@@ -98,7 +98,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         Button btn = new Button(getActivity().getApplicationContext());
         btn.setText("Reboot Now");
 
-        btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0x91000000));
+        btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0xFF000000));
         btn.setBackgroundColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad", 0xFF1DE9B6));
 //        btn.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
 
