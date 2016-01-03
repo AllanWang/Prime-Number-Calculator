@@ -17,17 +17,14 @@
 package com.pitchedapps.primenumbercalculator;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class CalculatorPadViewPager extends ViewPager {
 
-    private static int numpadCache = 0;
     private final PagerAdapter mStaticPagerAdapter = new PagerAdapter() {
         @Override
         public int getCount() {
@@ -101,8 +98,6 @@ public class CalculatorPadViewPager extends ViewPager {
         super(context, attrs);
 
         setAdapter(mStaticPagerAdapter);
-        Log.d("PNC ", "numpadCache " + numpadCache);
-        setBackgroundColor(numpadCache); //changed to allow transparency in number pad
         setOnPageChangeListener(mOnPageChangeListener);
         setPageMargin(getResources().getDimensionPixelSize(R.dimen.pad_page_margin));
         setPageTransformer(false, mPageTransformer);
@@ -116,9 +111,5 @@ public class CalculatorPadViewPager extends ViewPager {
         if (getAdapter() == mStaticPagerAdapter) {
             mStaticPagerAdapter.notifyDataSetChanged();
         }
-    }
-
-    public static void setNumpadCacheColor(int color) {
-        numpadCache = color;
     }
 }

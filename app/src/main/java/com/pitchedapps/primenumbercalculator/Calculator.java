@@ -855,10 +855,8 @@ public class Calculator extends FragmentActivity
         themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);
         themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
         themeAdvancedNumpadText = ColorUtils.setAlphaComponent(themes.getInt("theme_advanced_numpad_text", 0xFF000000), 145); //91 transparency
-
-//        CalculatorPadViewPager.setNumpadCacheColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(this, android.R.color.black), (new ColorDrawable(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt("theme_numpad", 0xFF434343))).getAlpha()));
-        CalculatorPadViewPager.setNumpadCacheColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(this, android.R.color.black), (new ColorDrawable(themeNumpad)).getAlpha()));
-        //display view
+        //adds black "cache" color with alpha depending on themeNumpad
+        mPadViewPager.setBackgroundColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(this, android.R.color.black), (new ColorDrawable(themeNumpad)).getAlpha()));
 
         mDisplayView.setBackgroundColor(themeDisplay);
         findViewById(R.id.pad_numeric).setBackgroundColor(themeNumpad);

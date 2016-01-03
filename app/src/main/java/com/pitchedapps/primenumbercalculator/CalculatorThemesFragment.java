@@ -17,30 +17,21 @@
 package com.pitchedapps.primenumbercalculator;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
-
-import java.util.prefs.Preferences;
 
 public class CalculatorThemesFragment extends PreferenceFragment {
 
@@ -75,9 +66,11 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.themes);
         getActivity().setTheme(R.style.ThemesSection);
 
+
         x = getArguments().getInt(GETX);
         y = getArguments().getInt(GETY);
 
+        ((ColorPickerPreference) findPreference("theme_display")).setTitle("hello");
 //        ((ColorPickerPreference) findPreference("color2")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 //
 //            @Override
@@ -88,7 +81,6 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 //
 //        });
 //        ((ColorPickerPreference) findPreference("color2")).setAlphaSliderEnabled(true);
-
     }
 
     @Override
@@ -101,16 +93,6 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0xFF000000));
         btn.setBackgroundColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad", 0xFF1DE9B6));
 //        btn.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-
-        v.addView(btn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = getActivity().getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName() );
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            }
-        });
 
         return v;
     }
@@ -193,5 +175,4 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 
         return anim;
     }
-
 }
