@@ -288,13 +288,6 @@ public class Calculator extends FragmentActivity
                 mDeleteButton.setVisibility(View.VISIBLE);
                 mClearButton.setVisibility(View.GONE);
             }
-
-            mInputEditText.setTextColor(
-                    getResources().getColor(R.color.display_input_text_color));
-            mResultEditText.setTextColor(
-                    getResources().getColor(R.color.display_result_text_color));
-            getWindow().setStatusBarColor(
-                    getResources().getColor(R.color.calculator_accent_color));
         }
     }
 
@@ -476,7 +469,7 @@ public class Calculator extends FragmentActivity
         }
     }
 
-    private void reveal(View sourceView, int colorRes, AnimatorListener listener) {
+    private void reveal(View sourceView, AnimatorListener listener) {
         final ViewGroupOverlay groupOverlay =
                 (ViewGroupOverlay) getWindow().getDecorView().getOverlay();
 
@@ -488,7 +481,7 @@ public class Calculator extends FragmentActivity
         revealView.setBottom(displayRect.bottom);
         revealView.setLeft(displayRect.left);
         revealView.setRight(displayRect.right);
-        revealView.setBackgroundColor(getResources().getColor(colorRes));
+        revealView.setBackgroundColor(themeClearAccent);
         groupOverlay.add(revealView);
 
         final int[] clearLocation = new int[2];
@@ -537,7 +530,7 @@ public class Calculator extends FragmentActivity
 
         final View sourceView = mClearButton.getVisibility() == View.VISIBLE
                 ? mClearButton : mDeleteButton;
-        reveal(sourceView, R.color.calculator_accent_color, new AnimatorListenerAdapter() {
+        reveal(sourceView, new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 mInputEditText.getEditableText().clear();
@@ -841,12 +834,14 @@ public class Calculator extends FragmentActivity
         themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
         themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
 
+        //display view
 
         findViewById(R.id.display).setBackgroundColor(themeDisplay);
         findViewById(R.id.pad_numeric).setBackgroundColor(themeNumpad);
         findViewById(R.id.root_layout).setBackgroundColor(themeAdvancedNumpad);
-//        mInputEditText.setTextColor(themeDisplayText);
-//        mResultEditText.setTextColor(themeDisplayText);
+        ((CalculatorEditText) findViewById(R.id.input)).setTextColor(themeDisplayText);
+        ((CalculatorEditText) findViewById(R.id.result)).setTextColor(themeDisplayText);
+        getWindow().setStatusBarColor(themeClearAccent);
 
         //numpad section
 

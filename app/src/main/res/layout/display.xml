@@ -14,31 +14,36 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/display"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:background="@color/display_background_color"
-    android:elevation="4dip">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <com.pitchedapps.primenumbercalculator.CalculatorEditText
-        android:id="@+id/input"
-        style="@style/DisplayEditTextStyle.Input"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text|textNoSuggestions"
-        android:textColor="@color/display_input_text_color" />
 
-    <com.pitchedapps.primenumbercalculator.CalculatorEditText
-        android:id="@+id/result"
-        style="@style/DisplayEditTextStyle.Result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/input"
-        android:inputType="none"
-        android:focusable="false"
-        android:textColor="@color/display_result_text_color" />
+        android:elevation="4dip">
 
-</RelativeLayout>
+        <com.pitchedapps.primenumbercalculator.CalculatorEditText
+            android:id="@+id/input"
+            style="@style/DisplayEditTextStyle.Input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textNoSuggestions"
+            android:textColor="@color/display_input_text_color" />
+
+        <com.pitchedapps.primenumbercalculator.CalculatorEditText
+            android:id="@+id/result"
+            style="@style/DisplayEditTextStyle.Result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input"
+            android:inputType="none"
+            android:focusable="false"
+            android:textColor="@color/display_result_text_color" />
+
+    </RelativeLayout>
+</ScrollView>
