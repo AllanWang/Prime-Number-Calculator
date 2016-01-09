@@ -57,6 +57,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pitchedapps.library.everything.BasicFunctions;
 import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChangeListener;
 
 import org.json.JSONArray;
@@ -175,6 +176,8 @@ public class Calculator extends FragmentActivity
     private TextView mHelpVersionName;
 
     private Animator mCurrentAnimator;
+
+    private BasicFunctions basic = new BasicFunctions(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -366,7 +369,8 @@ public class Calculator extends FragmentActivity
                 afterAdvancedPad(findViewById(R.id.help));
                 break;
             case R.id.advanced_contact_me:
-                onContact();
+//                onContact();
+                basic.onContact("test", "test", "test");
                 break;
             case R.id.advanced_rate_app:
                 Intent rate = new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URL + getApplicationContext().getPackageName()));
@@ -622,31 +626,31 @@ public class Calculator extends FragmentActivity
         onTheme = true;
     }
 
-    private void onContact() {
-        StringBuilder emailBuilder = new StringBuilder();
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + getResources().getString(R.string.email_id)));
-        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.email_subject));
-
-        emailBuilder.append("Write here");
-        emailBuilder.append("\n \nOS Version: ").append(System.getProperty("os.version")).append("(").append(Build.VERSION.INCREMENTAL).append(")");
-        emailBuilder.append("\nOS API Level: ").append(Build.VERSION.SDK_INT);
-        emailBuilder.append("\nDevice: ").append(Build.DEVICE);
-        emailBuilder.append("\nManufacturer: ").append(Build.MANUFACTURER);
-        emailBuilder.append("\nModel (and Product): ").append(Build.MODEL).append(" (").append(Build.PRODUCT).append(")");
-        PackageInfo appInfo = null;
-        try {
-            appInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        assert appInfo != null;
-        emailBuilder.append("\nApp Version Name: ").append(appInfo.versionName);
-        emailBuilder.append("\nApp Version Code: ").append(appInfo.versionCode);
-
-        intent.putExtra(Intent.EXTRA_TEXT, emailBuilder.toString());
-        startActivity(Intent.createChooser(intent, (getResources().getString(R.string.send_title))));
-    }
+//    private void onContact() {
+//        StringBuilder emailBuilder = new StringBuilder();
+//
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + getResources().getString(R.string.email_id)));
+//        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.email_subject));
+//
+//        emailBuilder.append("Write here");
+//        emailBuilder.append("\n \nOS Version: ").append(System.getProperty("os.version")).append("(").append(Build.VERSION.INCREMENTAL).append(")");
+//        emailBuilder.append("\nOS API Level: ").append(Build.VERSION.SDK_INT);
+//        emailBuilder.append("\nDevice: ").append(Build.DEVICE);
+//        emailBuilder.append("\nManufacturer: ").append(Build.MANUFACTURER);
+//        emailBuilder.append("\nModel (and Product): ").append(Build.MODEL).append(" (").append(Build.PRODUCT).append(")");
+//        PackageInfo appInfo = null;
+//        try {
+//            appInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        assert appInfo != null;
+//        emailBuilder.append("\nApp Version Name: ").append(appInfo.versionName);
+//        emailBuilder.append("\nApp Version Code: ").append(appInfo.versionCode);
+//
+//        intent.putExtra(Intent.EXTRA_TEXT, emailBuilder.toString());
+//        startActivity(Intent.createChooser(intent, (getResources().getString(R.string.send_title))));
+//    }
 
     public void onDonate() {
         CalculatorDonationsFragment donationsFragment;
