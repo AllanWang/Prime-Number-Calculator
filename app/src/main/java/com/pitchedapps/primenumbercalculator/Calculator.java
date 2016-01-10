@@ -38,6 +38,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -260,9 +262,9 @@ public class Calculator extends FragmentActivity
             }) ;
         }
 
-//        final LinearLayoutManager llm = new LinearLayoutManager(this);
-//        llm.setOrientation(LinearLayoutManager.VERTICAL);
-//        ((RecyclerView) findViewById(R.id.rv)).setLayoutManager(llm);
+        final LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        ((RecyclerView) findViewById(R.id.rv)).setLayoutManager(llm);
     }
 
     @Override
@@ -331,7 +333,7 @@ public class Calculator extends FragmentActivity
             addOnTouchListener(findViewById(R.id.advanced_credits));
             addOnTouchListenerText(findViewById(R.id.back_help));
             addOnTouchListenerText(findViewById(R.id.back_donate));
-//            addOnTouchListenerText(findViewById(R.id.back_credits));
+            addOnTouchListenerText(findViewById(R.id.back_credits));
 
         }
 
@@ -354,7 +356,6 @@ public class Calculator extends FragmentActivity
                 onClear();
                 break;
             case R.id.advanced_themes:
-//                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
                 onTheme();
                 break;
             case R.id.advanced_clear_list:
@@ -366,24 +367,12 @@ public class Calculator extends FragmentActivity
                 afterAdvancedPad(findViewById(R.id.help));
                 break;
             case R.id.advanced_contact_me:
-//                onContact();
                 basic.email();
                 break;
             case R.id.advanced_rate_app:
-//                Intent rate = new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URL + getApplicationContext().getPackageName()));
-//                startActivity(rate);
                 basic.rate();
                 break;
             case R.id.advanced_share_app:
-//                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-//                sharingIntent.setType("text/plain");
-//                String shareBody =
-//                        getResources().getString(R.string.share_one) +
-//                                getResources().getString(R.string.dev_name) +
-//                                getResources().getString(R.string.share_two) +
-//                                MARKET_URL + getApplicationContext().getPackageName();;
-//                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-//                startActivity(Intent.createChooser(sharingIntent, (getResources().getString(R.string.share_title))));
                 basic.share();
                 break;
             case R.id.advanced_about_dev:
@@ -402,8 +391,8 @@ public class Calculator extends FragmentActivity
                 startActivity(github);
                 break;
             case R.id.advanced_credits:
-                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
-//                onCredits(); //TODO fix this
+//                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                onCredits(); //TODO fix this
                 break;
             case R.id.advanced_donate:
                 onDonate();
@@ -625,32 +614,6 @@ public class Calculator extends FragmentActivity
         onTheme = true;
     }
 
-//    private void onContact() {
-//        StringBuilder emailBuilder = new StringBuilder();
-//
-//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + getResources().getString(R.string.email_id)));
-//        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.email_subject));
-//
-//        emailBuilder.append("Write here");
-//        emailBuilder.append("\n \nOS Version: ").append(System.getProperty("os.version")).append("(").append(Build.VERSION.INCREMENTAL).append(")");
-//        emailBuilder.append("\nOS API Level: ").append(Build.VERSION.SDK_INT);
-//        emailBuilder.append("\nDevice: ").append(Build.DEVICE);
-//        emailBuilder.append("\nManufacturer: ").append(Build.MANUFACTURER);
-//        emailBuilder.append("\nModel (and Product): ").append(Build.MODEL).append(" (").append(Build.PRODUCT).append(")");
-//        PackageInfo appInfo = null;
-//        try {
-//            appInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        assert appInfo != null;
-//        emailBuilder.append("\nApp Version Name: ").append(appInfo.versionName);
-//        emailBuilder.append("\nApp Version Code: ").append(appInfo.versionCode);
-//
-//        intent.putExtra(Intent.EXTRA_TEXT, emailBuilder.toString());
-//        startActivity(Intent.createChooser(intent, (getResources().getString(R.string.send_title))));
-//    }
-
     public void onDonate() {
         CalculatorDonationsFragment donationsFragment;
         if (isStoreVersion()) {
@@ -673,8 +636,6 @@ public class Calculator extends FragmentActivity
         CalculatorCreditsFragment creditsFragment = new CalculatorCreditsFragment();
 
         afterAdvancedPad(findViewById(R.id.advanced_credits_layout));
-//        findViewById(R.id.advanced_credits_layout).setVisibility(View.VISIBLE);
-//        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
         getFragmentManager().beginTransaction()
                 .replace(R.id.pad_advanced, creditsFragment)
                 .commit();
@@ -837,8 +798,8 @@ public class Calculator extends FragmentActivity
             onTheme = false;
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.help));
-//        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
-//            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
+        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
+            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
         } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.donations_fragment));
         } else {
