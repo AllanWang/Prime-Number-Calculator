@@ -93,8 +93,16 @@ public class CalculatorThemesFragment extends PreferenceFragment {
 
         btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0xFF000000));
         btn.setBackgroundColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad", 0xFF1DE9B6));
-//        btn.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        Log.d("PNC ", "button added");
+
+        v.addView(btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = getActivity().getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+        });
 
         return v;
     }

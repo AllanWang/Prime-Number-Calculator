@@ -31,7 +31,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -39,8 +38,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -218,12 +215,7 @@ public class Calculator extends FragmentActivity
         mInputEditText.setOnKeyListener(mInputOnKeyListener);
         mInputEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
-//        mBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
+
         //Setup donations
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
@@ -312,7 +304,6 @@ public class Calculator extends FragmentActivity
         } else if (subSetting == false) { // only run if current view is not a subSetting
             // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
-            Log.d("PNC ", "back ran");
         }
 
         subSetting = false; //make boolean back to original
@@ -411,8 +402,8 @@ public class Calculator extends FragmentActivity
                 startActivity(github);
                 break;
             case R.id.advanced_credits:
-//                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
-                onCredits(); //TODO fix this
+                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+//                onCredits(); //TODO fix this
                 break;
             case R.id.advanced_donate:
                 onDonate();
@@ -861,8 +852,9 @@ public class Calculator extends FragmentActivity
 
         themeDisplay = themes.getInt("theme_display", 0xFFFFFFFF);
         themeDisplayText = themes.getInt("theme_display_text", 0xFF000000);
-        themeDisplayInput = ColorUtils.setAlphaComponent(themeNumpadText, 138); //8A transparency
-        themeDisplayResult = ColorUtils.setAlphaComponent(themeNumpadText, 108); //6C transparency
+//        themeDisplayInput = themeDisplayText;
+        themeDisplayInput = ColorUtils.setAlphaComponent(themeDisplayText, 138); //8A transparency
+        themeDisplayResult = ColorUtils.setAlphaComponent(themeDisplayText, 108); //6C transparency
         themeClearAccent = themes.getInt("theme_clear_accent", 0xFF00BCD4);
         themeNumpad = themes.getInt("theme_numpad", 0xFF434343);
         themeNumpadText = themes.getInt("theme_numpad_text", 0xFFFFFFFF);

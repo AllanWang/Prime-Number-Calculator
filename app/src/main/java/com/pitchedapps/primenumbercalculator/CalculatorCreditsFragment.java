@@ -38,9 +38,9 @@ public class CalculatorCreditsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-//        llm.setOrientation(LinearLayoutManager.VERTICAL);
-//        rv.setLayoutManager(llm);
+        final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(llm);
 
         initializeData();
         initializeAdapter();
