@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -70,7 +71,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         x = getArguments().getInt(GETX);
         y = getArguments().getInt(GETY);
 
-        ((ColorPickerPreference) findPreference("theme_display")).setTitle("hello");
+//        ((ColorPickerPreference) findPreference("theme_display")).setTitle("hello");
 //        ((ColorPickerPreference) findPreference("color2")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 //
 //            @Override
@@ -93,6 +94,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
         btn.setTextColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad_text", 0xFF000000));
         btn.setBackgroundColor(PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getInt("theme_advanced_numpad", 0xFF1DE9B6));
 //        btn.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        Log.d("PNC ", "button added");
 
         return v;
     }

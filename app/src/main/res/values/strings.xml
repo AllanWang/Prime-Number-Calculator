@@ -58,7 +58,7 @@
     <string name="advanced_donate">Donate</string>
 
     <!--contact info-->
-    <string name="send_title">Send via</string>
+    <!--<string name="send_title">Send via</string>-->
     <string name="email_id">pitchedapps@gmail.com</string>
     <string name="email_subject">Prime Number Calculator Support</string>
 

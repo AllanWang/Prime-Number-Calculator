@@ -39,6 +39,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -177,8 +179,6 @@ public class Calculator extends FragmentActivity
 
     private Animator mCurrentAnimator;
 
-    private BasicFunctions basic = new BasicFunctions(this);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,6 +267,10 @@ public class Calculator extends FragmentActivity
                 }
             }) ;
         }
+
+//        final LinearLayoutManager llm = new LinearLayoutManager(this);
+//        llm.setOrientation(LinearLayoutManager.VERTICAL);
+//        ((RecyclerView) findViewById(R.id.rv)).setLayoutManager(llm);
     }
 
     @Override
@@ -333,6 +337,7 @@ public class Calculator extends FragmentActivity
             addOnTouchListener(findViewById(R.id.advanced_themes));
             addOnTouchListener(findViewById(R.id.advanced_help));
             addOnTouchListener(findViewById(R.id.advanced_donate));
+            addOnTouchListener(findViewById(R.id.advanced_credits));
             addOnTouchListenerText(findViewById(R.id.back_help));
             addOnTouchListenerText(findViewById(R.id.back_donate));
 //            addOnTouchListenerText(findViewById(R.id.back_credits));
@@ -346,6 +351,7 @@ public class Calculator extends FragmentActivity
     }
 
     public void onButtonClick(View view) throws IOException, ClassNotFoundException {
+        BasicFunctions basic = new BasicFunctions(this);
         switch (view.getId()) {
             case R.id.eq:
                 onEquals();
@@ -370,22 +376,24 @@ public class Calculator extends FragmentActivity
                 break;
             case R.id.advanced_contact_me:
 //                onContact();
-                basic.onContact("test", "test", "test");
+                basic.email();
                 break;
             case R.id.advanced_rate_app:
-                Intent rate = new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URL + getApplicationContext().getPackageName()));
-                startActivity(rate);
+//                Intent rate = new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URL + getApplicationContext().getPackageName()));
+//                startActivity(rate);
+                basic.rate();
                 break;
             case R.id.advanced_share_app:
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                String shareBody =
-                        getResources().getString(R.string.share_one) +
-                                getResources().getString(R.string.dev_name) +
-                                getResources().getString(R.string.share_two) +
-                                MARKET_URL + getApplicationContext().getPackageName();;
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, (getResources().getString(R.string.share_title))));
+//                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+//                sharingIntent.setType("text/plain");
+//                String shareBody =
+//                        getResources().getString(R.string.share_one) +
+//                                getResources().getString(R.string.dev_name) +
+//                                getResources().getString(R.string.share_two) +
+//                                MARKET_URL + getApplicationContext().getPackageName();;
+//                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+//                startActivity(Intent.createChooser(sharingIntent, (getResources().getString(R.string.share_title))));
+                basic.share();
                 break;
             case R.id.advanced_about_dev:
                 Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
@@ -403,8 +411,8 @@ public class Calculator extends FragmentActivity
                 startActivity(github);
                 break;
             case R.id.advanced_credits:
-                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
-//                onCredits(); //TODO fix this
+//                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
+                onCredits(); //TODO fix this
                 break;
             case R.id.advanced_donate:
                 onDonate();
@@ -674,7 +682,8 @@ public class Calculator extends FragmentActivity
         CalculatorCreditsFragment creditsFragment = new CalculatorCreditsFragment();
 
         afterAdvancedPad(findViewById(R.id.advanced_credits_layout));
-
+//        findViewById(R.id.advanced_credits_layout).setVisibility(View.VISIBLE);
+//        findViewById(R.id.pad_advanced).setVisibility(View.INVISIBLE);
         getFragmentManager().beginTransaction()
                 .replace(R.id.pad_advanced, creditsFragment)
                 .commit();
@@ -837,10 +846,10 @@ public class Calculator extends FragmentActivity
             onTheme = false;
         } else if (findViewById(R.id.help).getVisibility() == View.VISIBLE){
             backToAdvancedPad(findViewById(R.id.help));
-        } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
-            backToAdvancedPad(findViewById(R.id.donations_fragment));
 //        } else if (findViewById(R.id.advanced_credits_layout).getVisibility() == View.VISIBLE){
 //            backToAdvancedPad(findViewById(R.id.advanced_credits_layout));
+        } else if (findViewById(R.id.donations_fragment).getVisibility() == View.VISIBLE){
+            backToAdvancedPad(findViewById(R.id.donations_fragment));
         } else {
             subSetting = false;
         }

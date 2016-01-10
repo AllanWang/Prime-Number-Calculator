@@ -32,8 +32,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     List<Person> persons;
 
-    RecyclerViewAdapter(List<Person> persons){
-        this.persons = persons;
+    RecyclerViewAdapter(List<Person> apersons){
+        this.persons = apersons;
     }
 
     @Override
