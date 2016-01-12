@@ -140,7 +140,7 @@ public class CalculatorThemesFragment extends PreferenceFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pad_advanced_background_color_2));
+        getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pad_theme_background));
         getView().setClickable(true);
     }
 

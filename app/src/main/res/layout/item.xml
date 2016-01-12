@@ -28,6 +28,8 @@
             android:layout_toRightOf="@+id/person_photo"
             android:layout_alignParentTop="true"
             android:textSize="30sp"
+            android:textColor="@color/pad_button_advanced_text_color"
+            android:fontFamily="sans-serif-light"
             />
 
         <TextView
@@ -36,6 +38,8 @@
             android:id="@+id/person_age"
             android:layout_toRightOf="@+id/person_photo"
             android:layout_below="@+id/person_name"
+            android:textColor="@color/pad_button_advanced_text_color"
+            android:fontFamily="sans-serif-light"
             />
 
     </RelativeLayout>

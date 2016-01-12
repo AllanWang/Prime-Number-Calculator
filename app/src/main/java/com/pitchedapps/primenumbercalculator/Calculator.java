@@ -59,6 +59,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pitchedapps.library.everything.BasicFunctions;
+import com.pitchedapps.library.everything.cardlist.LoERecyclerView;
 import com.pitchedapps.primenumbercalculator.CalculatorEditText.OnTextSizeChangeListener;
 
 import org.json.JSONArray;
@@ -196,8 +197,6 @@ public class Calculator extends FragmentActivity
         mClearButton = findViewById(R.id.clr);
         mHelpVersionName = (TextView) findViewById(R.id.help_version_number);
 
-        themeEngine();
-
         savedInstanceState = savedInstanceState == null ? Bundle.EMPTY : savedInstanceState;
         setState(CalculatorState.values()[
                 savedInstanceState.getInt(KEY_CURRENT_STATE, CalculatorState.INPUT.ordinal())]);
@@ -218,19 +217,13 @@ public class Calculator extends FragmentActivity
         mInputEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
 
+        themeEngine();
+
         //Setup donations
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 
                 if (inventory != null) {
-//                    Log.d("PNC: ", "IAP inventory exists");
-//
-//                    Log.d("PNC: ", "Donations 1 is " + inventory.hasPurchase("prime.donation.1"));
-//                    Log.d("PNC: ", "Donations 2 is " + inventory.hasPurchase("prime.donation.2"));
-//                    Log.d("PNC: ", "Donations 3 is " + inventory.hasPurchase("prime.donation.3"));
-//                    Log.d("PNC: ", "Donations 5 is " + inventory.hasPurchase("prime.donation.5"));
-//                    Log.d("PNC: ", "Donations 10 is " + inventory.hasPurchase("prime.donation.10"));
-
                     if (inventory.hasPurchase("prime.donation.1") ||
                             inventory.hasPurchase("prime.donation.2") ||
                             inventory.hasPurchase("prime.donation.3") ||
@@ -262,9 +255,7 @@ public class Calculator extends FragmentActivity
             }) ;
         }
 
-        final LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        ((RecyclerView) findViewById(R.id.rv)).setLayoutManager(llm);
+        initiateCredits();
     }
 
     @Override
@@ -391,8 +382,7 @@ public class Calculator extends FragmentActivity
                 startActivity(github);
                 break;
             case R.id.advanced_credits:
-//                Toast.makeText(getApplicationContext(),"WIP", Toast.LENGTH_SHORT).show();
-                onCredits(); //TODO fix this
+                onCredits();
                 break;
             case R.id.advanced_donate:
                 onDonate();
@@ -633,12 +623,24 @@ public class Calculator extends FragmentActivity
     }
 
     public void onCredits() {
-        CalculatorCreditsFragment creditsFragment = new CalculatorCreditsFragment();
-
         afterAdvancedPad(findViewById(R.id.advanced_credits_layout));
-        getFragmentManager().beginTransaction()
-                .replace(R.id.pad_advanced, creditsFragment)
-                .commit();
+    }
+
+    public void initiateCredits() {
+        final LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        ((RecyclerView) findViewById(R.id.rv)).setLayoutManager(llm);
+
+        findViewById(R.id.advanced_credits_layout).setVisibility(View.INVISIBLE);
+        LoERecyclerView lrv = new LoERecyclerView(this);
+        lrv.initialize(findViewById(R.id.rv));
+        lrv.addLibCard("AOSP Calculator", "The official AOSP Calculator.", "android", "https://github.com/android/platform_packages_apps_calculator");
+        lrv.addLibCard("Android Donations Lib", "Android Donations Lib supports donations by Google Play Store, Flattr, PayPal, and Bitcoin.", "Sufficiently Secure", "https://github.com/SufficientlySecure/donations");
+        lrv.addLibCard("Circular Image View", "A fast circular ImageView perfect for profile images.", "hdodenhof", "https://github.com/hdodenhof/CircleImageView");
+        lrv.addLibCard("The Library of Everything", "Bits and pieces to make adding small features easier.", "asdfasdfvful", "https://github.com/asdfasdfvful/The-Library-of-Everything");
+        lrv.cardTheme(ColorUtils.setAlphaComponent(themeAdvancedNumpadText, 255), themeAdvancedNumpadText, themeAdvancedNumpadText, themeAdvancedNumpadText, "sans-serif-light");
+        //TODO remove button theme from line above as new method is created
+        lrv.finalize();
     }
 
 //  fade animations
@@ -813,7 +815,6 @@ public class Calculator extends FragmentActivity
 
         themeDisplay = themes.getInt("theme_display", 0xFFFFFFFF);
         themeDisplayText = themes.getInt("theme_display_text", 0xFF000000);
-//        themeDisplayInput = themeDisplayText;
         themeDisplayInput = ColorUtils.setAlphaComponent(themeDisplayText, 138); //8A transparency
         themeDisplayResult = ColorUtils.setAlphaComponent(themeDisplayText, 108); //6C transparency
         themeClearAccent = themes.getInt("theme_clear_accent", 0xFF00BCD4);
@@ -869,6 +870,10 @@ public class Calculator extends FragmentActivity
         ((TextView) findViewById(R.id.help_text)).setTextColor(themeAdvancedNumpadText);
         ((TextView) findViewById(R.id.help_version_number)).setTextColor(themeAdvancedNumpadText);
         ((TextView) findViewById(R.id.back_help)).setTextColor(themeAdvancedNumpadText);
+
+        //credit back, rest are themed in the built in theme engine in the Library of Everything
+        ((TextView) findViewById(R.id.back_credits)).setTextColor(themeAdvancedNumpadText);
+
     }
 
     public boolean isPremium() {

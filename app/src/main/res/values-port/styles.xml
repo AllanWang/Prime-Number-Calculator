@@ -40,7 +40,7 @@
         <item name="android:layout_margin">4dip</item>
         <item name="android:background">@drawable/pad_button_advanced_background</item>
         <item name="android:textColor">@color/pad_button_advanced_text_color</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/advanced_text</item>
     </style>
 
     <style name="PadButtonStyle.Numeric">
@@ -55,7 +55,7 @@
 
     <style name="PadButtonStyle.Operator.Text">
         <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/advanced_text</item>
     </style>
 
     <style name="PadLayoutStyle.Advanced">

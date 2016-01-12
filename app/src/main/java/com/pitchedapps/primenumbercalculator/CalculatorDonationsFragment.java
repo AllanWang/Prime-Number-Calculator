@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.ColorUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -359,7 +360,7 @@ public class CalculatorDonationsFragment extends Fragment {
         SharedPreferences themes = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 
         themeAdvancedNumpad = themes.getInt("theme_advanced_numpad", 0xFF1DE9B6);
-        themeAdvancedNumpadText = themes.getInt("theme_advanced_numpad_text", 0x91000000);
+        themeAdvancedNumpadText = ColorUtils.setAlphaComponent(themes.getInt("theme_advanced_numpad_text", 0xFF000000), 145);
 
         GradientDrawable buttonDrawable = new GradientDrawable(); //needed to add background color as well as radius to button
         buttonDrawable.setColor(themeAdvancedNumpad);

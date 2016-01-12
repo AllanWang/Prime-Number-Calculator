@@ -6,14 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="invisible"
-    android:padding="20.0dp"
     android:background="@color/pad_advanced_background_color_2">
 
     <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv" />
+        android:layout_width="match_parent"
+        android:id="@+id/rv"/>
 
     <TextView
         android:id="@+id/back_credits"
@@ -23,6 +21,7 @@
         android:layout_alignParentBottom="true"
         android:onClick="onBackPressed"
         android:clickable="true"
+        android:padding="20dip"
         android:text="@string/back"
         android:textColor="@color/pad_button_advanced_text_color"
         android:fontFamily="sans-serif-light"/>

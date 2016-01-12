@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cards_elevation">0dip</dimen>
+    <dimen name="loe_card_small_padding">3dip</dimen>
+    <dimen name="loe_card_padding">12dip</dimen>
+    <dimen name="loe_card_title_size">@dimen/advanced_text</dimen>
+    <dimen name="loe_card_desc_size">@dimen/advanced_text</dimen>
+    <dimen name="loe_card_margin_horizontal">8.0dip</dimen>
+    <dimen name="loe_card_margin_vertical">10.0dip</dimen>
+    <dimen name="loe_card_button_size">@dimen/advanced_text</dimen>
+    <dimen name="loe_card_image_size">60dip</dimen>
+    <dimen name="loe_civ_border_width">2dip</dimen>
+
+    <dimen name="advanced_text">15sp</dimen>
+</resources>
